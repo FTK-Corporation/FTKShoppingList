@@ -1,19 +1,24 @@
 package com.example.ftkshoppinglist
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class FirebaseAuthViewModel: ViewModel() {
+class FirebaseAuthViewModel : ViewModel() {
     private var user = mutableStateOf<FirebaseUser?>(null)
+    private var admin by mutableStateOf(false)
 
     fun registerUser(email: String, pwd: String) {
         Firebase.auth.createUserWithEmailAndPassword(email, pwd)
             .addOnSuccessListener {
                 user.value = it.user
+                createUData()
                 Log.d("FIREBASE", "Success")
             }.addOnFailureListener {
                 Log.e("FIREBASE", it.toString())
@@ -29,5 +34,44 @@ class FirebaseAuthViewModel: ViewModel() {
             .addOnFailureListener {
                 Log.e("FIREBASE", it.toString())
             }
+    }
+
+    private fun createUData() {
+        user.value.let { fUser ->
+            Firebase.firestore.collection("udata")
+                .document(fUser!!.uid)
+                .set(
+                    mapOf(
+                        "admin" to false
+                    )
+                )
+                .addOnSuccessListener {
+                    Log.d("FIREBASE", "Add successful")
+                }
+                .addOnFailureListener {
+                    Log.e("FIREBASE", it.toString())
+                }
+        }
+    }
+
+    fun checkAdmin(): Boolean {
+        if (user.value != null) {
+            user.value.let { fUser ->
+                Log.d("USER", fUser!!.uid)
+                Firebase.firestore.collection("udata").document(fUser!!.uid)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            admin = (document.data!!.get("admin") == true)
+                            Log.d("FIREBASE", "Admin fetch successful")
+                        } else {
+                            Log.d("FIREBASE", "No such document")
+                        }
+                    }.addOnFailureListener {
+                        Log.e("FIREBASE", "Failed to fetch document by uid")
+                    }
+            }
+        } else Log.d("USER", "No user info")
+        return admin
     }
 }
