@@ -59,6 +59,12 @@ fun MainApp(){
         composable(route = "Profile") {
             ProfileScreen(navController)
         }
+        composable(route="Shoppinglist"){
+            ShoppingListScreen(navController)
+        }
+        composable(route="Readylist"){
+            ReadyListScreen(navController)
+        }
     }
 }
 
@@ -75,7 +81,7 @@ fun WelcomeScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SelectionButtons()
+                SelectionButtons(navController)
             }
 
                 },
@@ -125,6 +131,20 @@ fun ProfileScreen(navController: NavController){
     )
 }
 
+@Composable
+fun ShoppingListScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("Create a list",navController)},
+        content={Text("This is where you make the list screen")}
+    )
+}
+@Composable
+fun ReadyListScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("Your current list",navController)},
+        content={Text("This is the ready list screen")}
+    )
+}
 
 @Composable
 fun MyTopBar(title:String, navController: NavController){
@@ -155,12 +175,12 @@ fun MyTopBar(title:String, navController: NavController){
 }
 
 @Composable
-fun SelectionButtons(){
+fun SelectionButtons(navController: NavController){
     Column(
         verticalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate("Shoppinglist") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
