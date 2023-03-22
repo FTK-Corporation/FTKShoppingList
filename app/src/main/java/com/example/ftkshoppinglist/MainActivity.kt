@@ -21,6 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,20 +36,41 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    WelcomeScreen()
+                    MainApp()
                 }
             }
         }
     }
 }
+@Composable
+fun MainApp(){
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = "Home"
+    ) {
+        composable(route = "Home") {
+            WelcomeScreen(navController)
+        }
+        composable(route = "Preset") {
+            PresetScreen(navController)
+        }
+        composable(route = "Profile") {
+            ProfileScreen(navController)
+        }
+    }
+}
+
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(navController: NavController) {
     Scaffold(
-        topBar = { MyTopBar()},
+        topBar = { MyTopBar("Shoppinglist App",navController)},
         content={
             Column(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -56,8 +80,23 @@ fun WelcomeScreen() {
                 },
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
-
 }
+@Composable
+fun PresetScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("Presets",navController)},
+        content={Text("This is the presets screen")}
+    )
+}
+@Composable
+fun ProfileScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("Profile",navController)},
+        content={Text("This is the profile screen")}
+    )
+}
+
+
 @Composable
 fun MyTopBar(title:String, navController: NavController){
     var expanded by remember { mutableStateOf(false) }
