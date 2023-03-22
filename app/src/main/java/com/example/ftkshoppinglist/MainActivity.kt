@@ -14,11 +14,13 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,18 +59,24 @@ fun WelcomeScreen() {
 
 }
 @Composable
-fun MyTopBar(){
+fun MyTopBar(title:String, navController: NavController){
+    var expanded by remember { mutableStateOf(false) }
     TopAppBar(
-        title={Text("Shoppinglist Extraordinaire")},
-        navigationIcon={
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Filled.Menu,contentDescription = null)
-            }
-        },
+        title={Text(title)},
         actions={
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Filled.MoreVert, contentDescription = null)
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(Icons.Filled.Menu, contentDescription = null)
             }
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded=false }) {
+                DropdownMenuItem(onClick = { navController.navigate("preset") }) {
+                    Text("Go to preset lists")
+                }
+                DropdownMenuItem(onClick = { navController.navigate("profile") }) {
+                    Text("Profile")
+                }
+            }
+
+
         }
     )
 }
