@@ -4,9 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    WelcomeScreen()
                 }
             }
         }
@@ -30,14 +31,27 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun WelcomeScreen() {
+    Scaffold(
+        topBar = { MyTopBar()},
+        content={ Text(text = "This is the content")},
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+    )
 
-@Preview(showBackground = true)
+}
 @Composable
-fun DefaultPreview() {
-    FTKShoppingListTheme {
-        Greeting("Android")
-    }
+fun MyTopBar(){
+    TopAppBar(
+        title={Text("Shoppinglist Extraordinaire")},
+        navigationIcon={
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(Icons.Filled.Menu,contentDescription = null)
+            }
+        },
+        actions={
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(Icons.Filled.MoreVert, contentDescription = null)
+            }
+        }
+    )
 }
