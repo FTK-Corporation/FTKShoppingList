@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
@@ -102,6 +103,11 @@ fun MyTopBar(title:String, navController: NavController){
     var expanded by remember { mutableStateOf(false) }
     TopAppBar(
         title={Text(title)},
+        navigationIcon = {
+                         IconButton(onClick = {navController.navigateUp()}) {
+                             Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                         }
+        },
         actions={
             IconButton(onClick = { expanded = !expanded }) {
                 Icon(Icons.Filled.Menu, contentDescription = null)
