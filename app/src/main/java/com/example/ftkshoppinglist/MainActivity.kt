@@ -3,14 +3,22 @@ package com.example.ftkshoppinglist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,7 +42,16 @@ class MainActivity : ComponentActivity() {
 fun WelcomeScreen() {
     Scaffold(
         topBar = { MyTopBar()},
-        content={ Text(text = "This is the content")},
+        content={
+            Column(
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SelectionButtons()
+            }
+
+                },
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
 
@@ -54,4 +71,22 @@ fun MyTopBar(){
             }
         }
     )
+}
+
+@Composable
+fun SelectionButtons(){
+    Column(
+        verticalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(60.dp)
+
+        ) {
+            Text(text = "Create your Shopping List!")
+        }
+    }
 }
