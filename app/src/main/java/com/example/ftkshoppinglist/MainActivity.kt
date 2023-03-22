@@ -93,7 +93,35 @@ fun PresetScreen(navController: NavController){
 fun ProfileScreen(navController: NavController){
     Scaffold(
         topBar = {MyTopBar("Profile",navController)},
-        content={Text("This is the profile screen")}
+        content={
+            Text("This is the profile screen")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .height(40.dp)
+                ) {
+                    Text(text = "Create an account")
+                }
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .height(40.dp)
+                ) {
+                    Text(text = "Login")
+                }
+            }
+        }
     )
 }
 
