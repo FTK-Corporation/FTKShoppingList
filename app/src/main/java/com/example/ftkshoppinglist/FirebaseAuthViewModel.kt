@@ -55,23 +55,23 @@ class FirebaseAuthViewModel : ViewModel() {
     }
 
     fun checkAdmin(): Boolean {
-        if (user.value != null) {
-            user.value.let { fUser ->
-                Log.d("USER", fUser!!.uid)
-                Firebase.firestore.collection("udata").document(fUser!!.uid)
-                    .get()
-                    .addOnSuccessListener { document ->
-                        if (document != null) {
-                            admin = (document.data!!.get("admin") == true)
-                            Log.d("FIREBASE", "Admin fetch successful")
-                        } else {
-                            Log.d("FIREBASE", "No such document")
-                        }
-                    }.addOnFailureListener {
-                        Log.e("FIREBASE", "Failed to fetch document by uid")
+        
+        user.value?.let { fUser ->
+            Log.d("USER", fUser.uid)
+            Firebase.firestore.collection("udata").document(fUser.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        admin = (document.data!!.get("admin") == true)
+                        Log.d("FIREBASE", "Admin fetch successful")
+                    } else {
+                        Log.d("FIREBASE", "No such document")
                     }
-            }
-        } else Log.d("USER", "No user info")
+                }.addOnFailureListener {
+                    Log.e("FIREBASE", "Failed to fetch document by uid")
+                }
+        } ?: Log.d("USER", "No user info")
+
         return admin
     }
 }
