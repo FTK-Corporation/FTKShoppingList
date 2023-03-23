@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,6 +72,9 @@ fun MainApp(){
         composable(route="Readylist"){
             ReadyListScreen(navController)
         }
+        composable(route="ShopSelect"){
+            ShopSelectionScreen(navController)
+        }
     }
 }
 
@@ -94,6 +98,37 @@ fun WelcomeScreen(navController: NavController) {
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
 }
+
+@Composable
+fun ShopSelectionScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("Choose the shop",navController)},
+        content={ SelectShop(navController)},
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+
+    )
+}
+
+@Composable
+fun SelectShop(navController: NavController){
+    var expanded by remember { mutableStateOf(false) }
+    Column(verticalArrangement = Arrangement.Center) {
+        Button(onClick = {expanded=!expanded}) { Text(text = "Click here to see the shops") }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded=false },
+        ) {
+            DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
+                    Text("Choose shop1")
+                }
+            DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
+                    Text("Choose shop2")
+                }
+
+        }
+    }
+}
+
 @Composable
 fun PresetScreen(navController: NavController){
     Scaffold(
@@ -259,7 +294,7 @@ fun SelectionButtons(navController: NavController){
         verticalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = { navController.navigate("Shoppinglist") },
+            onClick = { navController.navigate("ShopSelect") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
