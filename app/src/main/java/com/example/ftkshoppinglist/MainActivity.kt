@@ -188,15 +188,22 @@ fun ShoppingListScreen(navController: NavController){
 
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(
+                            start = 12.dp,
+                            top = 16.dp,
+                            end = 12.dp,
+                            bottom = 16.dp,
+                        ),
                         content = {
-                            items(6){
+                            items(8){
                                 Button(
                                     onClick = { /*TODO*/ },
                                     modifier = Modifier
                                         .height(150.dp)
                                         .width(150.dp)
+                                        .padding(4.dp)
                                 ) {
-                                    Text(text = "Search")
+                                    Text(text = "Product Goes Here :)")
                                 }
 
                             }
