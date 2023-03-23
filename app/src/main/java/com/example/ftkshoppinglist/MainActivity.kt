@@ -3,7 +3,12 @@ package com.example.ftkshoppinglist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,6 +23,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,7 +98,9 @@ fun WelcomeScreen(navController: NavController) {
 fun PresetScreen(navController: NavController){
     Scaffold(
         topBar = {MyTopBar("Presets",navController)},
-        content={Text("This is the presets screen")}
+        content={Text("This is the presets screen")},
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+
     )
 }
 @Composable
@@ -127,22 +135,86 @@ fun ProfileScreen(navController: NavController){
                     Text(text = "Login")
                 }
             }
-        }
+        },
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
 }
 
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShoppingListScreen(navController: NavController){
+    var text by remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
         topBar = {MyTopBar("Create a list",navController)},
-        content={Text("This is where you make the list screen")}
+        content={
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TextField(
+                        value = text,
+                        onValueChange = {
+                            text = it
+                        },
+                        label = { Text(text = "Search for items...") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(50.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp)
+                    ) {
+                        Button(
+                            onClick = { /*TODO*/ },
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(150.dp)
+                        ) {
+                            Text(text = "Filter")
+                        }
+                        Button(
+                            onClick = { /*TODO*/ },
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(150.dp)
+                        ) {
+                            Text(text = "Search")
+                        }
+
+                    }
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        content = {
+                            items(6){
+                                Button(
+                                    onClick = { /*TODO*/ },
+                                    modifier = Modifier
+                                        .height(150.dp)
+                                        .width(150.dp)
+                                ) {
+                                    Text(text = "Search")
+                                }
+
+                            }
+                        }
+                    )
+                    
+                }
+        },
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
+
 }
 @Composable
 fun ReadyListScreen(navController: NavController){
     Scaffold(
         topBar = {MyTopBar("Your current list",navController)},
-        content={Text("This is the ready list screen")}
+        content={Text("This is the ready list screen")},
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
 }
 
