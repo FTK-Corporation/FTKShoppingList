@@ -197,14 +197,14 @@ fun LoginScreen(navController: NavController){
     Scaffold(
         topBar = {MyTopBar("Login",navController)},
         content={
-            LogInForm()
+            LogInForm(navController)
                 },
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
 
     )
 }
 @Composable
-fun LogInForm(){
+fun LogInForm(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -232,7 +232,7 @@ fun LogInForm(){
                 .padding(8.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate("Home") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -245,13 +245,13 @@ fun LogInForm(){
 fun SignUpScreen(navController: NavController){
     Scaffold(
         topBar = {MyTopBar("SignUp",navController)},
-        content={ SignUpForm()},
+        content={ SignUpForm(navController)},
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
 
     )
 }
 @Composable
-fun SignUpForm(){
+fun SignUpForm(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -297,7 +297,7 @@ fun SignUpForm(){
                 .padding(8.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate("Login") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
