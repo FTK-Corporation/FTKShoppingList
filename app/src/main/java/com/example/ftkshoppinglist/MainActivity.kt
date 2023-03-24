@@ -75,6 +75,12 @@ fun MainApp(){
         composable(route="ShopSelect"){
             ShopSelectionScreen(navController)
         }
+        composable(route="Login"){
+            LoginScreen(navController)
+        }
+        composable(route="SignUp"){
+            SignUpScreen(navController)
+        }
     }
 }
 
@@ -112,11 +118,24 @@ fun ShopSelectionScreen(navController: NavController){
 @Composable
 fun SelectShop(navController: NavController){
     var expanded by remember { mutableStateOf(false) }
-    Column(verticalArrangement = Arrangement.Center) {
-        Button(onClick = {expanded=!expanded}) { Text(text = "Click here to see the shops") }
+    Column(verticalArrangement = Arrangement.Center,
+
+
+        ) {
+        Button(
+            onClick = {expanded=!expanded},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(60.dp)
+        ) {
+            Text(text = "Click here to see the shops")
+        }
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded=false },
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
                     Text("Choose shop1")
@@ -124,7 +143,6 @@ fun SelectShop(navController: NavController){
             DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
                     Text("Choose shop2")
                 }
-
         }
     }
 }
@@ -152,7 +170,7 @@ fun ProfileScreen(navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("SignUp") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -161,7 +179,7 @@ fun ProfileScreen(navController: NavController){
                     Text(text = "Create an account")
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("Login") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -173,6 +191,120 @@ fun ProfileScreen(navController: NavController){
         },
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
+}
+@Composable
+fun LoginScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("Login",navController)},
+        content={
+            LogInForm()
+                },
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+
+    )
+}
+@Composable
+fun LogInForm(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = CenterHorizontally
+    ) {
+        Text(text = "Welcome!")
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label={ Text(text = "Username/E-mail")},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label={ Text(text = "Password")},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(text = "Log In")
+        }
+    }
+}
+@Composable
+fun SignUpScreen(navController: NavController){
+    Scaffold(
+        topBar = {MyTopBar("SignUp",navController)},
+        content={ SignUpForm()},
+        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+
+    )
+}
+@Composable
+fun SignUpForm(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = CenterHorizontally
+    ) {
+        Text(text = "Create an account for even more content!")
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label={ Text(text = "E-mail")},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label={ Text(text = "Username")},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label={ Text(text = "Password")},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label={ Text(text = "Repeat Password")},
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(text = "Sign Up")
+        }
+    }
 }
 
 
