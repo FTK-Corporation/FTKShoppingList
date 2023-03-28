@@ -329,7 +329,7 @@ fun ShoppingListScreen(navController: NavController){
                             .padding(8.dp)
                     )
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(50.dp),
+                        horizontalArrangement = Arrangement.spacedBy(20.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp)
@@ -338,7 +338,7 @@ fun ShoppingListScreen(navController: NavController){
                             onClick = { /*TODO*/ },
                             modifier = Modifier
                                 .height(60.dp)
-                                .width(150.dp)
+                                .width(100.dp)
                         ) {
                             Text(text = "Filter")
                         }
@@ -346,9 +346,17 @@ fun ShoppingListScreen(navController: NavController){
                             onClick = { /*TODO*/ },
                             modifier = Modifier
                                 .height(60.dp)
-                                .width(150.dp)
+                                .width(100.dp)
                         ) {
                             Text(text = "Search")
+                        }
+                        Button(
+                            onClick = { /*TODO*/ },
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(100.dp)
+                        ) {
+                            Text(text = "Finish")
                         }
 
                     }
