@@ -351,7 +351,7 @@ fun ShoppingListScreen(navController: NavController){
                             Text(text = "Search")
                         }
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { navController.navigate("Readylist") },
                             modifier = Modifier
                                 .height(60.dp)
                                 .width(100.dp)
@@ -391,11 +391,28 @@ fun ShoppingListScreen(navController: NavController){
     )
 
 }
+
+
 @Composable
 fun ReadyListScreen(navController: NavController){
     Scaffold(
         topBar = {MyTopBar("Your current list",navController)},
-        content={Text("This is the ready list screen")},
+        content={
+            Column(
+                
+            ) {
+
+
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+
+                }
+            }
+                },
         bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
     )
 }
