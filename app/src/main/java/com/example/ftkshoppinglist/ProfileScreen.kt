@@ -13,37 +13,31 @@ import androidx.navigation.NavController
 
 @Composable
 fun ProfileScreen(navController: NavController) {
-    Scaffold(
-        topBar = { MyTopBar("Profile", navController) },
-        content = {
-            Text("This is the profile screen")
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(
-                    onClick = { navController.navigate("SignUp") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .height(40.dp)
-                ) {
-                    Text(text = "Create an account")
-                }
-                Button(
-                    onClick = { navController.navigate("Login") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .height(40.dp)
-                ) {
-                    Text(text = "Login")
-                }
-            }
-        },
-        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
-    )
+    Text("This is the profile screen")
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            onClick = { navController.navigate("SignUp") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(40.dp)
+        ) {
+            Text(text = "Create an account")
+        }
+        Button(
+            onClick = { navController.navigate("Login") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(40.dp)
+        ) {
+            Text(text = "Login")
+        }
+    }
 }

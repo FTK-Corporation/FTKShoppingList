@@ -10,12 +10,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun SignUpScreen(navController: NavController){
-    Scaffold(
-        topBar = {MyTopBar("SignUp",navController)},
-        content={ SignUpForm(navController)},
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation") } }
-
-    )
+    SignUpForm(navController)
 }
 @Composable
 fun SignUpForm(navController: NavController){

@@ -9,18 +9,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun LoginScreen(navController: NavController){
-    Scaffold(
-        topBar = {MyTopBar("Login",navController)},
-        content={
-            LogInForm(navController)
-        },
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation") } }
+fun LoginScreen(navController: NavController) {
 
-    )
+    LogInForm(navController)
+
 }
+
 @Composable
-fun LogInForm(navController: NavController){
+fun LogInForm(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +28,7 @@ fun LogInForm(navController: NavController){
         OutlinedTextField(
             value = "",
             onValueChange = {},
-            label={ Text(text = "Username/E-mail") },
+            label = { Text(text = "Username/E-mail") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -41,7 +37,7 @@ fun LogInForm(navController: NavController){
         OutlinedTextField(
             value = "",
             onValueChange = {},
-            label={ Text(text = "Password") },
+            label = { Text(text = "Password") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
