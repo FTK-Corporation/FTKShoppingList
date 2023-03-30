@@ -7,27 +7,16 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterStart
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -50,8 +39,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
-fun MainApp(){
+fun MainApp() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -66,19 +56,19 @@ fun MainApp(){
         composable(route = "Profile") {
             ProfileScreen(navController)
         }
-        composable(route="Shoppinglist"){
+        composable(route = "Shoppinglist") {
             ShoppingListScreen(navController)
         }
-        composable(route="Readylist"){
+        composable(route = "Readylist") {
             ReadyListScreen(navController)
         }
-        composable(route="ShopSelect"){
+        composable(route = "ShopSelect") {
             ShopSelectionScreen(navController)
         }
-        composable(route="Login"){
+        composable(route = "Login") {
             LoginScreen(navController)
         }
-        composable(route="SignUp"){
+        composable(route = "SignUp") {
             SignUpScreen(navController)
         }
     }
@@ -88,8 +78,8 @@ fun MainApp(){
 @Composable
 fun WelcomeScreen(navController: NavController) {
     Scaffold(
-        topBar = { MyTopBar("Shoppinglist App",navController)},
-        content={
+        topBar = { MyTopBar("Shoppinglist App", navController) },
+        content = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -100,30 +90,31 @@ fun WelcomeScreen(navController: NavController) {
                 SelectionButtons(navController)
             }
 
-                },
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+        },
+        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
     )
 }
 
 @Composable
-fun ShopSelectionScreen(navController: NavController){
+fun ShopSelectionScreen(navController: NavController) {
     Scaffold(
-        topBar = {MyTopBar("Choose the shop",navController)},
-        content={ SelectShop(navController)},
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+        topBar = { MyTopBar("Choose the shop", navController) },
+        content = { SelectShop(navController) },
+        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
 
     )
 }
 
 @Composable
-fun SelectShop(navController: NavController){
+fun SelectShop(navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
-    Column(verticalArrangement = Arrangement.Center,
+    Column(
+        verticalArrangement = Arrangement.Center,
 
 
         ) {
         Button(
-            onClick = {expanded=!expanded},
+            onClick = { expanded = !expanded },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -133,34 +124,35 @@ fun SelectShop(navController: NavController){
         }
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded=false },
+            onDismissRequest = { expanded = false },
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
-                    Text("Choose shop1")
-                }
+                Text("Choose shop1")
+            }
             DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
-                    Text("Choose shop2")
-                }
+                Text("Choose shop2")
+            }
         }
     }
 }
 
 @Composable
-fun PresetScreen(navController: NavController){
+fun PresetScreen(navController: NavController) {
     Scaffold(
-        topBar = {MyTopBar("Presets",navController)},
-        content={Text("This is the presets screen")},
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+        topBar = { MyTopBar("Presets", navController) },
+        content = { Text("This is the presets screen") },
+        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
 
     )
 }
+
 @Composable
-fun ProfileScreen(navController: NavController){
+fun ProfileScreen(navController: NavController) {
     Scaffold(
-        topBar = {MyTopBar("Profile",navController)},
-        content={
+        topBar = { MyTopBar("Profile", navController) },
+        content = {
             Text("This is the profile screen")
             Column(
                 modifier = Modifier
@@ -189,217 +181,102 @@ fun ProfileScreen(navController: NavController){
                 }
             }
         },
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
     )
 }
-@Composable
-fun LoginScreen(navController: NavController){
-    Scaffold(
-        topBar = {MyTopBar("Login",navController)},
-        content={
-            LogInForm(navController)
-                },
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
-
-    )
-}
-@Composable
-fun LogInForm(navController: NavController){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = CenterHorizontally
-    ) {
-        Text(text = "Welcome!")
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label={ Text(text = "Username/E-mail")},
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label={ Text(text = "Password")},
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        Button(
-            onClick = { navController.navigate("Home") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = "Log In")
-        }
-    }
-}
-@Composable
-fun SignUpScreen(navController: NavController){
-    Scaffold(
-        topBar = {MyTopBar("SignUp",navController)},
-        content={ SignUpForm(navController)},
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
-
-    )
-}
-@Composable
-fun SignUpForm(navController: NavController){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = CenterHorizontally
-    ) {
-        Text(text = "Create an account for even more content!")
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label={ Text(text = "E-mail")},
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label={ Text(text = "Username")},
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label={ Text(text = "Password")},
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label={ Text(text = "Repeat Password")},
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        Button(
-            onClick = { navController.navigate("Login") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = "Sign Up")
-        }
-    }
-}
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShoppingListScreen(navController: NavController){
+fun ShoppingListScreen(navController: NavController) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(
-        topBar = {MyTopBar("Create a list",navController)},
-        content={
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+        topBar = { MyTopBar("Create a list", navController) },
+        content = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                TextField(
+                    value = text,
+                    onValueChange = {
+                        text = it
+                    },
+                    label = { Text(text = "Search for items...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
                 ) {
-                    TextField(
-                        value = text,
-                        onValueChange = {
-                            text = it
-                        },
-                        label = { Text(text = "Search for items...") },
+                    Button(
+                        onClick = { /*TODO*/ },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp)
+                            .height(60.dp)
+                            .width(100.dp)
                     ) {
-                        Button(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(100.dp)
-                        ) {
-                            Text(text = "Filter")
-                        }
-                        Button(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(100.dp)
-                        ) {
-                            Text(text = "Search")
-                        }
-                        Button(
-                            onClick = { navController.navigate("Readylist") },
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(100.dp)
-                        ) {
-                            Text(text = "Finish")
-                        }
-
+                        Text(text = "Filter")
+                    }
+                    Button(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(100.dp)
+                    ) {
+                        Text(text = "Search")
+                    }
+                    Button(
+                        onClick = { navController.navigate("Readylist") },
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(100.dp)
+                    ) {
+                        Text(text = "Finish")
                     }
 
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(
-                            start = 12.dp,
-                            top = 16.dp,
-                            end = 12.dp,
-                            bottom = 16.dp,
-                        ),
-                        content = {
-                            items(8){
-                                Button(
-                                    onClick = { /*TODO*/ },
-                                    modifier = Modifier
-                                        .height(150.dp)
-                                        .width(150.dp)
-                                        .padding(4.dp)
-                                ) {
-                                    Text(text = "Product Goes Here :)")
-                                }
-
-                            }
-                        }
-                    )
-                    
                 }
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(
+                        start = 12.dp,
+                        top = 16.dp,
+                        end = 12.dp,
+                        bottom = 16.dp,
+                    ),
+                    content = {
+                        items(8) {
+                            Button(
+                                onClick = { /*TODO*/ },
+                                modifier = Modifier
+                                    .height(150.dp)
+                                    .width(150.dp)
+                                    .padding(4.dp)
+                            ) {
+                                Text(text = "Product Goes Here :)")
+                            }
+
+                        }
+                    }
+                )
+
+            }
         },
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
     )
 
 }
 
 
 @Composable
-fun ReadyListScreen(navController: NavController){
+fun ReadyListScreen(navController: NavController) {
     Scaffold(
-        topBar = {MyTopBar("Your current list",navController)},
-        content={
+        topBar = { MyTopBar("Your current list", navController) },
+        content = {
             Column(
-                
+
             ) {
 
 
@@ -412,26 +289,26 @@ fun ReadyListScreen(navController: NavController){
 
                 }
             }
-                },
-        bottomBar = { BottomAppBar{ Text(text = "FTK corporation")}}
+        },
+        bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
     )
 }
 
 @Composable
-fun MyTopBar(title:String, navController: NavController){
+fun MyTopBar(title: String, navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     TopAppBar(
-        title={Text(title)},
+        title = { Text(title) },
         navigationIcon = {
-                         IconButton(onClick = {navController.navigateUp()}) {
-                             Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                         }
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = null)
+            }
         },
-        actions={
+        actions = {
             IconButton(onClick = { expanded = !expanded }) {
                 Icon(Icons.Filled.Menu, contentDescription = null)
             }
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded=false }) {
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 DropdownMenuItem(onClick = { navController.navigate("preset") }) {
                     Text("Go to preset lists")
                 }
@@ -446,7 +323,7 @@ fun MyTopBar(title:String, navController: NavController){
 }
 
 @Composable
-fun SelectionButtons(navController: NavController){
+fun SelectionButtons(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.Center
     ) {
