@@ -54,8 +54,11 @@ class FirebaseAuthViewModel : ViewModel() {
         }
     }
 
-    fun checkAdmin(): Boolean {
+    fun checkUser():Boolean {
+        return (user.value != null)
+    }
 
+    fun checkAdmin(): Boolean {
         user.value?.let { fUser ->
             Log.d("USER", fUser.uid)
             Firebase.firestore.collection("udata").document(fUser.uid)
