@@ -48,6 +48,10 @@ fun PickImage() {
             value = storageViewModel.subCategory,
             onValueChange = { storageViewModel.changeSubCategory(it) },
             label = { Text(text = "Sub Category") })
+        OutlinedTextField(
+            value = storageViewModel.priceInput,
+            onValueChange = { storageViewModel.priceInput = it },
+            label = { Text(text = "Price") })
         Button(onClick = { launcher.launch("image/*") }) {
             Text(text = "Select Image")
         }

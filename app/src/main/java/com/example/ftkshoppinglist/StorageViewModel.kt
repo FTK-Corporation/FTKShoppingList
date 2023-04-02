@@ -18,7 +18,8 @@ data class Product(
     val imageUri: Uri,
     val aisle: String?,
     val category: String?,
-    val subCategory: String?
+    val subCategory: String?,
+    val price: Int
 )
 
 class StorageViewModel : ViewModel() {
@@ -57,6 +58,12 @@ class StorageViewModel : ViewModel() {
         subCategory = string
     }
 
+    var priceInput by mutableStateOf("")
+    private val price: Int
+        get() {
+            return priceInput.toIntOrNull() ?: 0
+        }
+
     fun addProduct() {
         Firebase.firestore.collection("productdata")
             .document(id.toString())
@@ -68,6 +75,7 @@ class StorageViewModel : ViewModel() {
                     productExists = true
                 } else {
                     Log.d("FIREBASE", "Product doesn't exist")
+                    productExists = false
                     var imageRef = Firebase.storage.reference.child(id.toString())
 
                     imageUri?.let { u ->
@@ -84,7 +92,8 @@ class StorageViewModel : ViewModel() {
                                                 remoteUri,
                                                 aisle,
                                                 category,
-                                                subCategory
+                                                subCategory,
+                                                price
                                             )
                                         )
                                         .addOnSuccessListener {
@@ -94,6 +103,7 @@ class StorageViewModel : ViewModel() {
                                             aisle = ""
                                             category = ""
                                             subCategory = ""
+                                            priceInput = ""
 
                                             imageUri = null
                                         }
