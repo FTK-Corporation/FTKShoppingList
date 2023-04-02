@@ -1,9 +1,11 @@
 package com.example.ftkshoppinglist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,7 +27,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -219,7 +223,8 @@ fun PresetScreen(navController: NavController) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShoppingListScreen(navController: NavController) {
-    var fireStrore = Firebase.firestore;
+
+    var fireStore = Firebase.firestore;
     val list = (1..10).map { it.toString() }
     var text by remember { mutableStateOf(TextFieldValue(""))
     }
@@ -278,15 +283,15 @@ fun ShoppingListScreen(navController: NavController) {
                 bottom = 16.dp,
             ),
             content = {
-                items(list.size) { index ->
-                    Button(
+                items(list.size) {
+                    TextButton(
                         onClick = { /*TODO*/ },
                         modifier = Modifier
                             .height(150.dp)
                             .width(150.dp)
                             .padding(4.dp)
                     ) {
-                        Text(text = "Product Goes Here :)")
+                        Text(text= "bababooe")
                     }
 
                 }
