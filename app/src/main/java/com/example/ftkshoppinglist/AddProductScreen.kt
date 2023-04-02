@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,8 +31,9 @@ fun PickImage() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(8.dp)
-
+        modifier = Modifier
+            .padding(8.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         OutlinedTextField(
             value = storageViewModel.idInput,
@@ -78,8 +81,8 @@ fun PickImage() {
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(
                 onClick = { launcher.launch("image/*") },
-                
-            ) {
+
+                ) {
                 Text(text = "Select Image")
             }
             if (storageViewModel.imageUri != null) Text(text = storageViewModel.imageUri.toString())
