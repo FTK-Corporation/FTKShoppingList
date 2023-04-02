@@ -76,7 +76,7 @@ class StorageViewModel : ViewModel() {
                 } else {
                     Log.d("FIREBASE", "Product doesn't exist")
                     productExists = false
-                    var imageRef = Firebase.storage.reference.child(id.toString())
+                    val imageRef = Firebase.storage.reference.child(id.toString())
 
                     imageUri?.let { u ->
                         imageRef.putFile(u)
