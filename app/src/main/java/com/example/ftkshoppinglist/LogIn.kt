@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 @Composable
@@ -17,6 +18,7 @@ fun LoginScreen(navController: NavController) {
 
 @Composable
 fun LogInForm(navController: NavController) {
+    var authViewModel: FirebaseAuthViewModel = viewModel()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -26,17 +28,17 @@ fun LogInForm(navController: NavController) {
     ) {
         Text(text = "Welcome!")
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = "Username/E-mail") },
+            value = authViewModel.emailInput,
+            onValueChange = { authViewModel.emailInput = it },
+            label = { Text(text = "E-mail") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = authViewModel.pwdInput,
+            onValueChange = { authViewModel.pwdInput = it },
             label = { Text(text = "Password") },
             singleLine = true,
             modifier = Modifier
@@ -44,7 +46,7 @@ fun LogInForm(navController: NavController) {
                 .padding(8.dp)
         )
         Button(
-            onClick = { navController.navigate("Home") },
+            onClick = { handleLogin(navController, authViewModel) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -52,4 +54,9 @@ fun LogInForm(navController: NavController) {
             Text(text = "Log In")
         }
     }
+}
+
+private fun handleLogin(navController: NavController, authViewModel: FirebaseAuthViewModel) {
+    authViewModel.signInUser()
+    navController.navigate("Profile")
 }

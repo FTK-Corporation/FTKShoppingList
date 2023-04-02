@@ -11,11 +11,16 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class FirebaseAuthViewModel : ViewModel() {
-    private var user = mutableStateOf<FirebaseUser?>(null)
+    var user = mutableStateOf<FirebaseUser?>(null)
+    var logged by mutableStateOf(false)
     private var admin by mutableStateOf(false)
 
-    fun registerUser(email: String, pwd: String) {
-        Firebase.auth.createUserWithEmailAndPassword(email, pwd)
+    var emailInput by mutableStateOf("")
+    var pwdInput by mutableStateOf("")
+    var usernameInput by mutableStateOf("")
+
+    fun registerUser() {
+        Firebase.auth.createUserWithEmailAndPassword(emailInput, pwdInput)
             .addOnSuccessListener {
                 user.value = it.user
                 createUData()
@@ -25,8 +30,8 @@ class FirebaseAuthViewModel : ViewModel() {
             }
     }
 
-    fun signInUser(email: String, pwd: String) {
-        Firebase.auth.signInWithEmailAndPassword(email, pwd)
+    fun signInUser() {
+        Firebase.auth.signInWithEmailAndPassword(emailInput, pwdInput)
             .addOnSuccessListener {
                 user.value = it.user
                 Log.d("FIREBASE", "Log In Success")
@@ -42,7 +47,8 @@ class FirebaseAuthViewModel : ViewModel() {
                 .document(fUser!!.uid)
                 .set(
                     mapOf(
-                        "admin" to false
+                        "admin" to false,
+                        "username" to usernameInput
                     )
                 )
                 .addOnSuccessListener {
@@ -54,8 +60,9 @@ class FirebaseAuthViewModel : ViewModel() {
         }
     }
 
-    fun checkUser():Boolean {
-        return (user.value != null)
+    fun checkUser() {
+        Log.d("USER", user.value.toString())
+        logged = (user.value != null)
     }
 
     fun checkAdmin(): Boolean {
