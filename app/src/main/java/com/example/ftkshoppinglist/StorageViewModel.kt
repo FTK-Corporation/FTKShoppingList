@@ -87,6 +87,16 @@ class StorageViewModel : ViewModel() {
                                                 subCategory
                                             )
                                         )
+                                        .addOnSuccessListener {
+                                            idInput = ""
+                                            name = ""
+                                            description = ""
+                                            aisle = ""
+                                            category = ""
+                                            subCategory = ""
+
+                                            imageUri = null
+                                        }
                                 }
                             }
                             .addOnFailureListener {
