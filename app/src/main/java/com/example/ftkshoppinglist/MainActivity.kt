@@ -24,6 +24,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    AddProductScreen()
+                    MainApp()
                 }
             }
         }
@@ -217,7 +219,10 @@ fun PresetScreen(navController: NavController) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShoppingListScreen(navController: NavController) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+    var fireStrore = Firebase.firestore;
+    val list = (1..10).map { it.toString() }
+    var text by remember { mutableStateOf(TextFieldValue(""))
+    }
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -273,7 +278,7 @@ fun ShoppingListScreen(navController: NavController) {
                 bottom = 16.dp,
             ),
             content = {
-                items(8) {
+                items(list.size) { index ->
                     Button(
                         onClick = { /*TODO*/ },
                         modifier = Modifier
