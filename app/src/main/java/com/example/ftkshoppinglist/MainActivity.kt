@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -17,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -25,6 +27,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
@@ -223,7 +227,11 @@ fun PresetScreen(navController: NavController) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ShoppingListScreen(navController: NavController) {
+    var byteArray by remember { mutableStateOf<ByteArray?>(null) }
 
+    var painter = rememberAsyncImagePainter(
+        model = byteArray
+    )
     var fireStore = Firebase.firestore;
     val list = (1..10).map { it.toString() }
     var text by remember { mutableStateOf(TextFieldValue(""))
@@ -284,14 +292,17 @@ fun ShoppingListScreen(navController: NavController) {
             ),
             content = {
                 items(list.size) {
-                    TextButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
-                            .padding(4.dp)
-                    ) {
-                        Text(text= "bababooe")
+
+                    Box() {
+                        AsyncImage(
+                            model = "https://firebasestorage.googleapis.com/v0/b/ftk-shoppinglist.appspot.com/o/2001?alt=media&token=849cc8b7-56b8-4125-ae7f-3b588d10423e",
+                            contentDescription = "images",
+                            modifier = Modifier
+                                .height(150.dp)
+                                .width(150.dp)
+                                .padding(4.dp)
+                                .clickable { }
+                        )
                     }
 
                 }
