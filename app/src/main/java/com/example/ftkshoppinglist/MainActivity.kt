@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -227,33 +228,10 @@ fun PresetScreen(navController: NavController) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShoppingListScreen(navController: NavController) {
-    var byteArray by remember { mutableStateOf<ByteArray?>(null) }
-    var products by remember {
-        mutableStateOf(mutableListOf<ProductData>())
-    }
-    var painter = rememberAsyncImagePainter(
-        model = byteArray
-    )
-    var fireStore = Firebase.firestore;
+fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel = viewModel()) {
+
     LaunchedEffect(null){
-        fireStore.collection("productdata")
-            .get()
-            .addOnSuccessListener {
-                val p = mutableListOf<ProductData>()
-                it.documents.forEach { doc ->
-                    Log.e("--", "--")
-                    p.add(
-                        ProductData(
-                            doc.get("id").toString(),
-                            doc.get("description").toString(),
-                            doc.get("imageUri").toString(),
-                            doc.get("name").toString()
-                        )
-                    )
-                }
-                products = p;
-            }
+        productsViewModel.fetchProducts()
     }
     var text by remember { mutableStateOf(TextFieldValue(""))
     }
@@ -312,7 +290,7 @@ fun ShoppingListScreen(navController: NavController) {
                 bottom = 16.dp,
             ),
             content = {
-                items(products){
+                items(productsViewModel.products){
 
                     Box() {
                         AsyncImage(
