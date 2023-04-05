@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -228,12 +229,32 @@ fun PresetScreen(navController: NavController) {
 @Composable
 fun ShoppingListScreen(navController: NavController) {
     var byteArray by remember { mutableStateOf<ByteArray?>(null) }
-
+    var products by remember {
+        mutableStateOf(mutableListOf<ProductData>())
+    }
     var painter = rememberAsyncImagePainter(
         model = byteArray
     )
     var fireStore = Firebase.firestore;
-    val list = (1..10).map { it.toString() }
+    LaunchedEffect(null){
+        fireStore.collection("productdata")
+            .get()
+            .addOnSuccessListener {
+                val p = mutableListOf<ProductData>()
+                it.documents.forEach { doc ->
+                    Log.e("--", "--")
+                    p.add(
+                        ProductData(
+                            doc.get("id").toString(),
+                            doc.get("description").toString(),
+                            doc.get("imageUri").toString(),
+                            doc.get("name").toString()
+                        )
+                    )
+                }
+                products = p;
+            }
+    }
     var text by remember { mutableStateOf(TextFieldValue(""))
     }
     Column(
@@ -291,11 +312,11 @@ fun ShoppingListScreen(navController: NavController) {
                 bottom = 16.dp,
             ),
             content = {
-                items(list.size) {
+                items(products){
 
                     Box() {
                         AsyncImage(
-                            model = "https://firebasestorage.googleapis.com/v0/b/ftk-shoppinglist.appspot.com/o/2001?alt=media&token=849cc8b7-56b8-4125-ae7f-3b588d10423e",
+                            model = it.imageUri,
                             contentDescription = "images",
                             modifier = Modifier
                                 .height(150.dp)
