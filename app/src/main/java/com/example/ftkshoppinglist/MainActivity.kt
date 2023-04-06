@@ -268,34 +268,19 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
 
 
 @Composable
-fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()){
-    LaunchedEffect(null){
+fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()) {
+    LaunchedEffect(null) {
         productsViewModel.fetchProducts()
-    }
-
-
-@Composable
-fun SelectionButtons(navController: NavController) {
-    Column(
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = { navController.navigate("ShopSelect") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(60.dp)
-
-        ) {
-            Text(text = "Create your Shopping List!")
-        }
     }
 }
 
+
+
+
 class WindowCenterOffsetPositionProvider(
     private val x: Int = 0,
-    private val y: Int = 0
-) : PopupPositionProvider {
+    private val y: Int = 0)
+    : PopupPositionProvider {
     override fun calculatePosition(
         anchorBounds: IntRect,
         windowSize: IntSize,
