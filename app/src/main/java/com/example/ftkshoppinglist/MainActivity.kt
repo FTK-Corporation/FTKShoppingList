@@ -106,6 +106,10 @@ fun MainApp() {
             topBarTitle = "Sign Up"
             topBarHideIcon = false
         }
+        "AddProduct" -> {
+            topBarTitle = "Add a Product to Database"
+            topBarHideIcon = false
+        }
         else -> {
             topBarTitle = "Default"
             topBarHideIcon = false
@@ -279,6 +283,24 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
 fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()) {
     LaunchedEffect(null) {
         productsViewModel.fetchProducts()
+    }
+}
+
+@Composable
+fun SelectionButtons(navController: NavController) {
+    Column(
+        verticalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = { navController.navigate("ShopSelect") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(60.dp)
+
+        ) {
+            Text(text = "Create your Shopping List!")
+        }
     }
 }
 
