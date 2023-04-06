@@ -1,9 +1,11 @@
 package com.example.ftkshoppinglist
 
+import android.content.ClipData.Item
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,7 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -118,7 +123,7 @@ fun MainApp() {
 @Composable
 fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel = viewModel()) {
 
-    LaunchedEffect(null){
+    LaunchedEffect(Unit){
         productsViewModel.fetchProducts()
     }
     var text by remember { mutableStateOf(TextFieldValue(""))
@@ -197,7 +202,38 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             }
 
         }
+        var popupControl by remember { mutableStateOf(false) }
+        if (popupControl) {
+            Popup(
+                popupPositionProvider = WindowCenterOffsetPositionProvider(),
+                onDismissRequest = { popupControl = false },
+            ) {
+                Surface(
+                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colors.secondary,
+                ) {
+                    Box(
+                        modifier = Modifier.padding(100.dp),
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "Todo1")
+                            Text(text = "Todo2")
+                            Spacer(modifier = Modifier.height(32.dp))
+                            Button(
+                                onClick = { popupControl = false },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = "Return to selection")
+                            }
+                        }
+                    }
+                }
 
+            }
+        }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(
@@ -208,8 +244,10 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             ),
             content = {
                 items(productsViewModel.products){
-
-                    Box() {
+                    TextButton(
+                        onClick = { popupControl = true },
+                        modifier = Modifier.padding(10.dp)
+                    ) {
                         AsyncImage(
                             model = it.imageUri,
                             contentDescription = "images",
@@ -217,9 +255,10 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                 .height(150.dp)
                                 .width(150.dp)
                                 .padding(4.dp)
-                                .clickable { }
                         )
+
                     }
+
 
                 }
             }
@@ -235,4 +274,37 @@ fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()){
     }
 
 
+@Composable
+fun SelectionButtons(navController: NavController) {
+    Column(
+        verticalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = { navController.navigate("ShopSelect") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .height(60.dp)
+
+        ) {
+            Text(text = "Create your Shopping List!")
+        }
+    }
+}
+
+class WindowCenterOffsetPositionProvider(
+    private val x: Int = 0,
+    private val y: Int = 0
+) : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize
+    ): IntOffset {
+        return IntOffset(
+            (windowSize.width - popupContentSize.width) / 2 + x,
+            (windowSize.height - popupContentSize.height) / 2 + y
+        )
+    }
 }
