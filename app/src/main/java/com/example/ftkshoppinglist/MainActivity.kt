@@ -146,7 +146,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding( 20.dp)
         ) {
             Button(
                 onClick = { expanded=!expanded },
@@ -172,7 +172,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                     Text("Home repair")
                 }
                 DropdownMenuItem(onClick = { /*TODO*/ }) {
-                    Text("Small technology")
+                    Text("Small electronics")
                 }
                 DropdownMenuItem(onClick = { /*TODO*/ }) {
                     Text("Pet equipment")
@@ -256,10 +256,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                 .width(150.dp)
                                 .padding(4.dp)
                         )
-
                     }
-
-
                 }
             }
         )
@@ -273,8 +270,6 @@ fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()) {
         productsViewModel.fetchProducts()
     }
 }
-
-
 
 
 class WindowCenterOffsetPositionProvider(
