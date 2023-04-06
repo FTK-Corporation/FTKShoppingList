@@ -31,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.example.ftkshoppinglist.ui.MyTopBar
 import com.example.ftkshoppinglist.ui.navCon
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 import com.google.firebase.firestore.ktx.firestore
@@ -112,34 +113,6 @@ fun MainApp() {
     )
 }
 
-@Composable
-fun MyTopBar(title: String, navController: NavController, hideArrow: Boolean? = false) {
-    var expanded by remember { mutableStateOf(false) }
-    TopAppBar(
-        title = { Text(title) },
-        navigationIcon = {
-            if (hideArrow != true) IconButton(onClick = { navController.navigateUp() }) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = null)
-            }
-        },
-        actions = {
-            IconButton(onClick = { expanded = !expanded }) {
-                Icon(Icons.Filled.Menu, contentDescription = null)
-            }
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(onClick = { navController.navigate("preset") }) {
-                    Text("Go to preset lists")
-                }
-                DropdownMenuItem(onClick = { navController.navigate("profile") }) {
-                    Text("Profile")
-                }
-            }
-
-
-        }
-    )
-}
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -150,6 +123,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
     }
     var text by remember { mutableStateOf(TextFieldValue(""))
     }
+    var expanded by remember { mutableStateOf(false) }
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -170,12 +144,40 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 .padding(20.dp)
         ) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { expanded=!expanded },
                 modifier = Modifier
                     .height(60.dp)
                     .width(100.dp)
             ) {
                 Text(text = "Filter")
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                DropdownMenuItem(onClick = { }) {
+                    Text("Food and drinks")
+                }
+                DropdownMenuItem(onClick = { }) {
+                    Text("Cooking utensils")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text("Home repair")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text("Small technology")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text("Pet equipment")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text("Toys")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text("Clothing")
+                }
             }
             Button(
                 onClick = { /*TODO*/ },
@@ -222,6 +224,15 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 }
             }
         )
-
     }
+}
+
+
+@Composable
+fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()){
+    LaunchedEffect(null){
+        productsViewModel.fetchProducts()
+    }
+
+
 }

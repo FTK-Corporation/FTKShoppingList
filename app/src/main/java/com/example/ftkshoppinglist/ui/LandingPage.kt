@@ -1,9 +1,11 @@
 package com.example.ftkshoppinglist.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,35 @@ fun WelcomeScreen(navController: NavController) {
         SelectionButtons(navController)
     }
 }
+
+@Composable
+fun MyTopBar(title: String, navController: NavController, hideArrow: Boolean? = false) {
+    var expanded by remember { mutableStateOf(false) }
+    TopAppBar(
+        title = { Text(title) },
+        navigationIcon = {
+            if (hideArrow != true) IconButton(onClick = { navController.navigateUp() }) {
+                Icon(Icons.Filled.ArrowBack, contentDescription = null)
+            }
+        },
+        actions = {
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(Icons.Filled.Menu, contentDescription = null)
+            }
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                DropdownMenuItem(onClick = { navController.navigate("preset") }) {
+                    Text("Go to preset lists")
+                }
+                DropdownMenuItem(onClick = { navController.navigate("profile") }) {
+                    Text("Profile")
+                }
+            }
+
+
+        }
+    )
+}
+
 
 @Composable
 fun SelectionButtons(navController: NavController) {

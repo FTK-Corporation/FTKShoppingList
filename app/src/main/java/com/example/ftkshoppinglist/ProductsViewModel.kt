@@ -30,7 +30,4 @@ class ProductsViewModel: ViewModel() {
                 products = p;
             }
     }
-
-
-
 }
