@@ -202,38 +202,8 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             }
 
         }
-        var popupControl by remember { mutableStateOf(false) }
-        if (popupControl) {
-            Popup(
-                popupPositionProvider = WindowCenterOffsetPositionProvider(),
-                onDismissRequest = { popupControl = false },
-            ) {
-                Surface(
-                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
-                    shape = RoundedCornerShape(8.dp),
-                    color = MaterialTheme.colors.secondary,
-                ) {
-                    Box(
-                        modifier = Modifier.padding(100.dp),
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "Todo1")
-                            Text(text = "Todo2")
-                            Spacer(modifier = Modifier.height(32.dp))
-                            Button(
-                                onClick = { popupControl = false },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(text = "Return to selection")
-                            }
-                        }
-                    }
-                }
+        var popupControl by remember { mutableStateOf<ProductData?>(null) }
 
-            }
-        }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(
@@ -243,19 +213,60 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 bottom = 16.dp,
             ),
             content = {
-                items(productsViewModel.products){
+                items(productsViewModel.products){ product ->
                     TextButton(
-                        onClick = { popupControl = true },
+                        onClick = { popupControl = product },
                         modifier = Modifier.padding(10.dp)
                     ) {
                         AsyncImage(
-                            model = it.imageUri,
+                            model = product.imageUri,
                             contentDescription = "images",
                             modifier = Modifier
                                 .height(150.dp)
                                 .width(150.dp)
                                 .padding(4.dp)
                         )
+                        if (popupControl == product) {
+                            Popup(
+                                popupPositionProvider = WindowCenterOffsetPositionProvider(),
+                                onDismissRequest = { popupControl = null },
+                            ) {
+                                Surface(
+                                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = MaterialTheme.colors.secondary,
+                                ) {
+                                    Box(
+                                        modifier = Modifier.padding(100.dp),
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+
+                                        ) {
+                                            AsyncImage(
+                                                model = product.imageUri,
+                                                contentDescription = "Image")
+                                            Text(text = product.name)
+                                            Text(text = product.description)
+                                            Spacer(modifier = Modifier.height(32.dp))
+                                            Button(
+                                                onClick = { popupControl = null },
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                Text(text = "Return to selection")
+                                            }
+                                            Button(
+                                                onClick = { /*TODO*/}
+                                            ){
+                                                Text(text = "Add to list!")
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+
                     }
                 }
             }
