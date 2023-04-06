@@ -31,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.example.ftkshoppinglist.ui.navCon
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
@@ -50,39 +51,6 @@ class MainActivity : ComponentActivity() {
                     MainApp()
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun navCon(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = "Home"
-    ) {
-        composable(route = "Home") {
-            WelcomeScreen(navController)
-        }
-        composable(route = "Preset") {
-            PresetScreen(navController)
-        }
-        composable(route = "Profile") {
-            ProfileScreen(navController)
-        }
-        composable(route = "Shoppinglist") {
-            ShoppingListScreen(navController)
-        }
-        composable(route = "Readylist") {
-            ReadyListScreen(navController)
-        }
-        composable(route = "ShopSelect") {
-            ShopSelectionScreen(navController)
-        }
-        composable(route = "Login") {
-            LoginScreen(navController)
-        }
-        composable(route = "SignUp") {
-            SignUpScreen(navController)
         }
     }
 }
@@ -172,59 +140,6 @@ fun MyTopBar(title: String, navController: NavController, hideArrow: Boolean? = 
     )
 }
 
-@Composable
-fun WelcomeScreen(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        SelectionButtons(navController)
-    }
-}
-
-@Composable
-fun ShopSelectionScreen(navController: NavController) {
-    SelectShop(navController)
-}
-
-@Composable
-fun SelectShop(navController: NavController) {
-    var expanded by remember { mutableStateOf(false) }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        ) {
-        Button(
-            onClick = { expanded = !expanded },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(60.dp)
-        ) {
-            Text(text = "Click here to see the shops")
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
-                Text("Choose shop1")
-            }
-            DropdownMenuItem(onClick = { navController.navigate("Shoppinglist") }) {
-                Text("Choose shop2")
-            }
-        }
-    }
-}
-
-@Composable
-fun PresetScreen(navController: NavController) {
-    Text("This is the presets screen")
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -308,43 +223,5 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             }
         )
 
-    }
-}
-
-
-@Composable
-fun ReadyListScreen(navController: NavController) {
-    Column(
-
-    ) {
-
-
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-
-        }
-    }
-}
-
-
-@Composable
-fun SelectionButtons(navController: NavController) {
-    Column(
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = { navController.navigate("ShopSelect") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(60.dp)
-
-        ) {
-            Text(text = "Create your Shopping List!")
-        }
     }
 }
