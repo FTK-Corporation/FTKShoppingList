@@ -11,13 +11,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 @Composable
-fun SignUpScreen(navController: NavController) {
-    SignUpForm(navController)
+fun SignUpScreen(navController: NavController, authViewModel: FirebaseAuthViewModel) {
+    SignUpForm(navController, authViewModel)
 }
 
 @Composable
-fun SignUpForm(navController: NavController) {
-    var authViewModel: FirebaseAuthViewModel = viewModel()
+fun SignUpForm(navController: NavController, authViewModel: FirebaseAuthViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

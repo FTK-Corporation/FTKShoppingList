@@ -12,7 +12,6 @@ import com.google.firebase.ktx.Firebase
 
 class FirebaseAuthViewModel : ViewModel() {
     var user = mutableStateOf<FirebaseUser?>(null)
-    var logged by mutableStateOf(false)
     private var admin by mutableStateOf(false)
 
     var emailInput by mutableStateOf("")
@@ -60,9 +59,8 @@ class FirebaseAuthViewModel : ViewModel() {
         }
     }
 
-    fun checkUser() {
-        Log.d("USER", user.value.toString())
-        logged = (user.value != null)
+    fun checkUser(): Boolean {
+        return (user.value != null)
     }
 
     fun checkAdmin(): Boolean {
