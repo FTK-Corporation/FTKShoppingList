@@ -70,5 +70,4 @@ fun ProductCard(name: String, id: String) {
         Text(text = "$name    $id", modifier = Modifier.padding(10.dp))
     }
 
-
 }

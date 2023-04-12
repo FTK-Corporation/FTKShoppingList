@@ -96,6 +96,7 @@ fun MainApp() {
             topBarTitle = "Add a Product to Database"
             topBarHideIcon = false
         }
+
         else -> {
             topBarTitle = "Default"
             topBarHideIcon = false
@@ -118,16 +119,16 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
         productsViewModel.fetchProducts()
     }
 
-    var text by remember { mutableStateOf(TextFieldValue(""))
+    var textQuery by remember { mutableStateOf("")
     }
     var expanded by remember { mutableStateOf(false) }
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         TextField(
-            value = text,
+            value = textQuery,
             onValueChange = {
-                text = it
+                textQuery = it.lowercase()
             },
             label = { Text(text = "Search for items...") },
             modifier = Modifier
@@ -177,14 +178,6 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 }
             }
             Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .height(60.dp)
-                    .width(100.dp)
-            ) {
-                Text(text = "Search")
-            }
-            Button(
                 onClick = { navController.navigate("Readylist") },
                 modifier = Modifier
                     .height(60.dp)
@@ -206,6 +199,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             ),
             content = {
                 items(productsViewModel.products){ product ->
+                    if(product.name.lowercase().contains(textQuery))
                     TextButton(
                         onClick = { productsViewModel.popupControl = product },
                         modifier = Modifier.padding(10.dp)
