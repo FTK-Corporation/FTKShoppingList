@@ -39,10 +39,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ftkshoppinglist.ui.MyTopBar
 import com.example.ftkshoppinglist.ui.navCon
 import com.example.ftkshoppinglist.ui.theme.FTKShoppingListTheme
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.tasks.await
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,11 +127,14 @@ fun MainApp() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel = viewModel()) {
+fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel = viewModel(), productData: ProductData) {
 
+
+    var fireBase = Firebase.firestore;
     LaunchedEffect(Unit){
         productsViewModel.fetchProducts()
     }
+
     var text by remember { mutableStateOf(TextFieldValue(""))
     }
     var expanded by remember { mutableStateOf(false) }
@@ -224,7 +229,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                     ) {
                         AsyncImage(
                             model = product.imageUri,
-                            contentDescription = "images",
+                            contentDescription = "Image",
                             modifier = Modifier
                                 .height(150.dp)
                                 .width(150.dp)
@@ -260,7 +265,11 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                                 Text(text = "Return to selection")
                                             }
                                             Button(
-                                                onClick = { /*TODO*/}
+                                                onClick = {
+                                                    val collection = fireBase.collection("presetdata")
+                                                    val snapshot = collection.get().addOnCanceledListener {  }
+                                                    
+                                                }
                                             ){
                                                 Text(text = "Add to list!")
                                             }
@@ -321,3 +330,5 @@ class WindowCenterOffsetPositionProvider(
         )
     }
 }
+
+
