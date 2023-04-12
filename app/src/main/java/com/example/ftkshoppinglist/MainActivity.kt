@@ -154,7 +154,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( 20.dp)
+                .padding(20.dp)
         ) {
             Button(
                 onClick = { expanded=!expanded },
@@ -170,7 +170,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                DropdownMenuItem(onClick = { }) {
+                DropdownMenuItem(onClick = {  }) {
                     Text("Food and drinks")
                 }
                 DropdownMenuItem(onClick = { }) {
@@ -295,32 +295,6 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 }
             }
         )
-    }
-}
-
-
-@Composable
-fun FilterLogic(productsViewModel: ProductsViewModel = viewModel()) {
-    LaunchedEffect(null) {
-        productsViewModel.fetchProducts()
-    }
-}
-
-@Composable
-fun SelectionButtons(navController: NavController) {
-    Column(
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = { navController.navigate("ShopSelect") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(60.dp)
-
-        ) {
-            Text(text = "Create your Shopping List!")
-        }
     }
 }
 
