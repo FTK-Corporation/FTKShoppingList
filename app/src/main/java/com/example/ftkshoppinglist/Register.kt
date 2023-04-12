@@ -1,14 +1,17 @@
 package com.example.ftkshoppinglist
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.ftkshoppinglist.elements.CenteredProgressCircle
 
 @Composable
 fun SignUpScreen(navController: NavController, authViewModel: FirebaseAuthViewModel) {
@@ -62,7 +65,7 @@ fun SignUpForm(navController: NavController, authViewModel: FirebaseAuthViewMode
 //                .padding(8.dp)
 //        )
         Button(
-            onClick = { handleRegister(navController, authViewModel) },
+            onClick = { authViewModel.registerUser() },
             enabled = (authViewModel.emailInput.isNotEmpty() && authViewModel.pwdInput.isNotEmpty()),
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,11 +75,19 @@ fun SignUpForm(navController: NavController, authViewModel: FirebaseAuthViewMode
             Text(text = "Sign Up")
         }
     }
-}
-
-private fun handleRegister(navController: NavController, authViewModel: FirebaseAuthViewModel) {
-    authViewModel.registerUser()
-    navController.navigate("Profile")
+    when(authViewModel.logInState) {
+        "LOADING" -> {
+            CenteredProgressCircle()
+        }
+        "SUCCESS" -> {
+            navController.navigate("Profile")
+            authViewModel.logInState = ""
+        }
+        "FAILURE" -> {
+            Toast.makeText(LocalContext.current, authViewModel.errorMessage, Toast.LENGTH_LONG).show()
+            authViewModel.logInState = ""
+        }
+    }
 }
 
 

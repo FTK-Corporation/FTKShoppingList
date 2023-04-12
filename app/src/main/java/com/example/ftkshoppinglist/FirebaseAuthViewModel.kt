@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlin.math.log
 
 class FirebaseAuthViewModel : ViewModel() {
     var user = mutableStateOf<FirebaseUser?>(null)
@@ -18,24 +19,35 @@ class FirebaseAuthViewModel : ViewModel() {
     var pwdInput by mutableStateOf("")
     var usernameInput by mutableStateOf("")
 
+    var logInState by mutableStateOf("")
+    var errorMessage by mutableStateOf("")
+
     fun registerUser() {
+        logInState="LOADING"
         Firebase.auth.createUserWithEmailAndPassword(emailInput, pwdInput)
             .addOnSuccessListener {
                 user.value = it.user
                 createUData()
+                logInState="SUCCESS"
                 Log.d("FIREBASE", "Success")
             }.addOnFailureListener {
+                logInState="FAILURE"
+                errorMessage=it.toString().substringAfter(":").trim()
                 Log.e("FIREBASE", it.toString())
             }
     }
 
     fun signInUser() {
+        logInState="LOADING"
         Firebase.auth.signInWithEmailAndPassword(emailInput, pwdInput)
             .addOnSuccessListener {
                 user.value = it.user
+                logInState="SUCCESS"
                 Log.d("FIREBASE", "Log In Success")
             }
             .addOnFailureListener {
+                logInState="FAILURE"
+                errorMessage=it.toString().substringAfter(":").trim()
                 Log.e("FIREBASE", it.toString())
             }
     }
