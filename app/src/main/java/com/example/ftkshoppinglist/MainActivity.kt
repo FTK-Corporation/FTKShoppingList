@@ -127,8 +127,7 @@ fun MainApp() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel = viewModel(), productData: ProductData) {
-
+fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel) {
 
     var fireBase = Firebase.firestore;
     LaunchedEffect(Unit){
@@ -207,11 +206,11 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                     .height(60.dp)
                     .width(100.dp)
             ) {
-                Text(text = "Finish")
+                Text(text = "To Shopping list!")
             }
 
         }
-        var popupControl by remember { mutableStateOf<ProductData?>(null) }
+
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -224,7 +223,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
             content = {
                 items(productsViewModel.products){ product ->
                     TextButton(
-                        onClick = { popupControl = product },
+                        onClick = { productsViewModel.popupControl = product },
                         modifier = Modifier.padding(10.dp)
                     ) {
                         AsyncImage(
@@ -235,10 +234,10 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                 .width(150.dp)
                                 .padding(4.dp)
                         )
-                        if (popupControl == product) {
+                        if (productsViewModel.popupControl == product) {
                             Popup(
-                                popupPositionProvider = WindowCenterOffsetPositionProvider(),
-                                onDismissRequest = { popupControl = null },
+                                popupPositionProvider = productsViewModel.posProvider,
+                                onDismissRequest = { productsViewModel.popupControl = null },
                             ) {
                                 Surface(
                                     border = BorderStroke(3.dp, MaterialTheme.colors.primary),
@@ -259,15 +258,27 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                             Text(text = product.description)
                                             Spacer(modifier = Modifier.height(32.dp))
                                             Button(
-                                                onClick = { popupControl = null },
+                                                onClick = { productsViewModel.popupControl = null },
                                                 modifier = Modifier.fillMaxWidth()
                                             ) {
                                                 Text(text = "Return to selection")
                                             }
                                             Button(
                                                 onClick = {
-                                                    val collection = fireBase.collection("presetdata")
-                                                    val snapshot = collection.get().addOnCanceledListener {  }
+                                                    val newProduct = ProductData(
+                                                        id = product.id,
+                                                        name = product.name,
+                                                        description = product.description,
+                                                        imageUri = product.imageUri
+                                                    )
+                                                    val newList = productsViewModel.list.toMutableList()
+                                                    // add the new product to the new list variable
+                                                    newList.add(newProduct)
+                                                    // update the list variable with the new list
+                                                    productsViewModel.list = newList
+
+                                                    productsViewModel.popupControl = null
+
                                                     
                                                 }
                                             ){

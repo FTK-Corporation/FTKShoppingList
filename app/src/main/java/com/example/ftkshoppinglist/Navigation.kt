@@ -10,6 +10,7 @@ import com.example.ftkshoppinglist.*
 @Composable
 fun navCon(navController: NavHostController) {
     var authViewModel: FirebaseAuthViewModel = viewModel()
+    var productsViewModel: ProductsViewModel = viewModel()
     NavHost(
         navController = navController,
         startDestination = "Home"
@@ -24,10 +25,10 @@ fun navCon(navController: NavHostController) {
             ProfileScreen(navController, authViewModel)
         }
         composable(route = "Shoppinglist") {
-            ShoppingListScreen(navController)
+            ShoppingListScreen(navController, productsViewModel)
         }
         composable(route = "Readylist") {
-            ReadyListScreen(navController)
+            ReadyListScreen(navController, productsViewModel)
         }
         composable(route = "ShopSelect") {
             ShopSelectionScreen(navController)
