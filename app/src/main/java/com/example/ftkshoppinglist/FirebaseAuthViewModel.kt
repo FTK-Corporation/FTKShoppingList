@@ -15,6 +15,11 @@ class FirebaseAuthViewModel : ViewModel() {
     var user = mutableStateOf<FirebaseUser?>(null)
     private var admin by mutableStateOf(false)
 
+    init {
+        if (user.value == null)
+            user.value = Firebase.auth.currentUser
+    }
+
     var emailInput by mutableStateOf("")
     var pwdInput by mutableStateOf("")
     var usernameInput by mutableStateOf("")
