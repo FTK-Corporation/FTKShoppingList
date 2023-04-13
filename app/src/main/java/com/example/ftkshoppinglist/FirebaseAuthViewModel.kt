@@ -94,4 +94,10 @@ class FirebaseAuthViewModel : ViewModel() {
 
         return admin
     }
+
+    fun logOut() {
+        Firebase.auth.signOut()
+        user.value = null
+        admin = false
+    }
 }
