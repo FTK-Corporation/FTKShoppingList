@@ -42,6 +42,8 @@ fun navCon(navController: NavHostController) {
         composable(route = "AddProduct") {
             AddProductScreen()
         }
-
+        composable(route = "UpdateProduct") {
+            UpdateProductScreen()
+        }
     }
 }

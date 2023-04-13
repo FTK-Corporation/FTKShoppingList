@@ -96,6 +96,10 @@ fun MainApp() {
             topBarTitle = "Add a Product to Database"
             topBarHideIcon = false
         }
+        "UpdateProduct" -> {
+            topBarTitle = "Update Product information"
+            topBarHideIcon = false
+        }
 
         else -> {
             topBarTitle = "Default"
