@@ -1,6 +1,7 @@
 package com.example.ftkshoppinglist.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,8 +11,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ftkshoppinglist.ProductData
@@ -20,19 +22,23 @@ import com.example.ftkshoppinglist.ProductsViewModel
 @Composable
 fun ReadyListScreen(navController: NavController, productsViewModel: ProductsViewModel) {
 
-    LazyVerticalGrid(
+
+        LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(
             start = 12.dp,
             top = 16.dp,
             end = 12.dp,
-            bottom = 16.dp),
+            bottom = 16.dp
+        ),
         content = {
-            items(productsViewModel.list){ list ->
+            items(productsViewModel.list) { list ->
                 TextButton(
-                    onClick = { "" },
-                    modifier = Modifier.padding(10.dp)
-                ){
+                    onClick = { productsViewModel.popupControl = list },
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .background(if (productsViewModel.isButtonClicked) MaterialTheme.colors.primary else MaterialTheme.colors.secondary)
+                ) {
                     AsyncImage(
                         model = list.imageUri,
                         contentDescription = "Image",
@@ -41,9 +47,10 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                             .width(150.dp)
                             .padding(4.dp)
                     )
+
                     if (productsViewModel.popupControl == list) {
                         Popup(
-                            popupPositionProvider = productsViewModel.posProvider,
+                            popupPositionProvider = WindowCenterOffsetPositionProvider(),
                             onDismissRequest = { productsViewModel.popupControl = null },
                         ) {
                             Surface(
@@ -64,6 +71,7 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                                         )
                                         Text(text = list.name)
                                         Text(text = list.description)
+                                        Text(text = list.aisle)
                                         Spacer(modifier = Modifier.height(32.dp))
                                         Button(
                                             onClick = { productsViewModel.popupControl = null },
@@ -71,14 +79,86 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                                         ) {
                                             Text(text = "Return to selection")
                                         }
-                                        
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+
             }
         }
     )
+
+
+        Button(
+            onClick = { productsViewModel.isFinishButtonClicked = true },
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
+            Text(text = "Finish Shopping!")
+        }
+        if (productsViewModel.isFinishButtonClicked) {
+            Popup(
+                popupPositionProvider = WindowCenterOffsetPositionProvider(),
+                onDismissRequest = { productsViewModel.isFinishButtonClicked = false },
+            ) {
+                Surface(
+                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colors.secondary,
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(text = "Would you like to save this list into the presets?")
+
+                        Button(
+                            onClick = { productsViewModel.isFinishButtonClicked = false }
+                        ) {
+                            Text(text = "Return to list")
+                        }
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+
+
+                            Button(
+                                onClick = {
+                                    productsViewModel.list = mutableListOf<ProductData>()
+                                    productsViewModel.isFinishButtonClicked = false
+                                }
+                            ) {
+                                Text(text = "Don't save it")
+                            }
+                            Button(
+                                onClick = { /*TODO*/ }
+                            ) {
+                                Text(text = "Save it!")
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+}
+
+
+class WindowCenterOffsetPositionProvider(
+    private val x: Int = 0,
+    private val y: Int = 0
+) : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize
+    ): IntOffset {
+        return IntOffset(
+            (windowSize.width - popupContentSize.width) / 2 + x,
+            (windowSize.height - popupContentSize.height) / 2 + y
+        )
+    }
 }

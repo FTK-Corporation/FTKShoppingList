@@ -219,7 +219,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                             )
                             if (productsViewModel.popupControl == product) {
                                 Popup(
-                                    popupPositionProvider = productsViewModel.posProvider,
+                                    popupPositionProvider = WindowCenterOffsetPositionProvider(),
                                     onDismissRequest = { productsViewModel.popupControl = null },
                                 ) {
                                     Surface(
@@ -255,7 +255,8 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                                             id = product.id,
                                                             name = product.name,
                                                             description = product.description,
-                                                            imageUri = product.imageUri
+                                                            imageUri = product.imageUri,
+                                                            aisle = product.aisle
                                                         )
                                                         val newList =
                                                             productsViewModel.list.toMutableList()

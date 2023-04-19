@@ -4,5 +4,5 @@ data class ProductData(
     val id: String,
     val description: String,
     val imageUri: String,
-    val name: String
+    val name: String,
 )

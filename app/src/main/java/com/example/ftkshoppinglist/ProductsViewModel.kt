@@ -1,6 +1,7 @@
 package com.example.ftkshoppinglist
 
 import android.util.Log
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
@@ -13,7 +14,9 @@ class ProductsViewModel: ViewModel() {
 
     var popupControl by mutableStateOf<ProductData?>(null)
 
-    var posProvider = WindowCenterOffsetPositionProvider()
+    var isButtonClicked by  mutableStateOf(false)
+
+    var isFinishButtonClicked by mutableStateOf(false)
 
     fun fetchProducts() {
         Firebase.firestore.collection("productdata")
@@ -27,7 +30,8 @@ class ProductsViewModel: ViewModel() {
                             doc.get("id").toString(),
                             doc.get("description").toString(),
                             doc.get("imageUri").toString(),
-                            doc.get("name").toString()
+                            doc.get("name").toString(),
+                            doc.get("aisle").toString()
                         )
                     )
                 }
