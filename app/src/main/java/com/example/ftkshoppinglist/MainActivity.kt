@@ -119,11 +119,12 @@ fun MainApp() {
 fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel) {
 
     var fireBase = Firebase.firestore;
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         productsViewModel.fetchProducts()
     }
 
-    var textQuery by remember { mutableStateOf("")
+    var textQuery by remember {
+        mutableStateOf("")
     }
     var expanded by remember { mutableStateOf(false) }
     Column(
@@ -146,7 +147,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 .padding(20.dp)
         ) {
             Button(
-                onClick = { expanded=!expanded },
+                onClick = { expanded = !expanded },
                 modifier = Modifier
                     .height(60.dp)
                     .width(100.dp)
@@ -159,7 +160,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                DropdownMenuItem(onClick = {  }) {
+                DropdownMenuItem(onClick = { }) {
                     Text("Food and drinks")
                 }
                 DropdownMenuItem(onClick = { }) {
@@ -202,77 +203,82 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 bottom = 16.dp,
             ),
             content = {
-                items(productsViewModel.products){ product ->
-                    if(product.name.lowercase().contains(textQuery))
-                    TextButton(
-                        onClick = { productsViewModel.popupControl = product },
-                        modifier = Modifier.padding(10.dp)
-                    ) {
-                        AsyncImage(
-                            model = product.imageUri,
-                            contentDescription = "Image",
-                            modifier = Modifier
-                                .height(150.dp)
-                                .width(150.dp)
-                                .padding(4.dp)
-                        )
-                        if (productsViewModel.popupControl == product) {
-                            Popup(
-                                popupPositionProvider = productsViewModel.posProvider,
-                                onDismissRequest = { productsViewModel.popupControl = null },
-                            ) {
-                                Surface(
-                                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
-                                    shape = RoundedCornerShape(8.dp),
-                                    color = MaterialTheme.colors.secondary,
+                items(productsViewModel.products) { product ->
+                    if (product.name.lowercase().contains(textQuery)) {
+                        TextButton(
+                            onClick = { productsViewModel.popupControl = product },
+                            modifier = Modifier.padding(10.dp)
+                        ) {
+                            AsyncImage(
+                                model = product.imageUri,
+                                contentDescription = "Image",
+                                modifier = Modifier
+                                    .height(150.dp)
+                                    .width(150.dp)
+                                    .padding(4.dp)
+                            )
+                            if (productsViewModel.popupControl == product) {
+                                Popup(
+                                    popupPositionProvider = productsViewModel.posProvider,
+                                    onDismissRequest = { productsViewModel.popupControl = null },
                                 ) {
-                                    Box(
-                                        modifier = Modifier.padding(100.dp),
+                                    Surface(
+                                        border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+                                        shape = RoundedCornerShape(8.dp),
+                                        color = MaterialTheme.colors.secondary,
                                     ) {
-                                        Column(
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-
+                                        Box(
+                                            modifier = Modifier.padding(100.dp),
                                         ) {
-                                            AsyncImage(
-                                                model = product.imageUri,
-                                                contentDescription = "Image")
-                                            Text(text = product.name)
-                                            Text(text = product.description)
-                                            Spacer(modifier = Modifier.height(32.dp))
-                                            Button(
-                                                onClick = { productsViewModel.popupControl = null },
-                                                modifier = Modifier.fillMaxWidth()
-                                            ) {
-                                                Text(text = "Return to selection")
-                                            }
-                                            Button(
-                                                onClick = {
-                                                    val newProduct = ProductData(
-                                                        id = product.id,
-                                                        name = product.name,
-                                                        description = product.description,
-                                                        imageUri = product.imageUri
-                                                    )
-                                                    val newList = productsViewModel.list.toMutableList()
-                                                    // add the new product to the new list variable
-                                                    newList.add(newProduct)
-                                                    // update the list variable with the new list
-                                                    productsViewModel.list = newList
+                                            Column(
+                                                horizontalAlignment = Alignment.CenterHorizontally,
 
-                                                    productsViewModel.popupControl = null
-
-                                                    
+                                                ) {
+                                                AsyncImage(
+                                                    model = product.imageUri,
+                                                    contentDescription = "Image"
+                                                )
+                                                Text(text = product.name)
+                                                Text(text = product.description)
+                                                Spacer(modifier = Modifier.height(32.dp))
+                                                Button(
+                                                    onClick = {
+                                                        productsViewModel.popupControl = null
+                                                    },
+                                                    modifier = Modifier.fillMaxWidth()
+                                                ) {
+                                                    Text(text = "Return to selection")
                                                 }
-                                            ){
-                                                Text(text = "Add to list!")
+                                                Button(
+                                                    onClick = {
+                                                        val newProduct = ProductData(
+                                                            id = product.id,
+                                                            name = product.name,
+                                                            description = product.description,
+                                                            imageUri = product.imageUri
+                                                        )
+                                                        val newList =
+                                                            productsViewModel.list.toMutableList()
+                                                        // add the new product to the new list variable
+                                                        newList.add(newProduct)
+                                                        // update the list variable with the new list
+                                                        productsViewModel.list = newList
+
+                                                        productsViewModel.popupControl = null
+
+
+                                                    }
+                                                ) {
+                                                    Text(text = "Add to list!")
+                                                }
                                             }
                                         }
                                     }
+
                                 }
-
                             }
-                        }
 
+                        }
                     }
                 }
             }
@@ -283,8 +289,8 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
 
 class WindowCenterOffsetPositionProvider(
     private val x: Int = 0,
-    private val y: Int = 0)
-    : PopupPositionProvider {
+    private val y: Int = 0
+) : PopupPositionProvider {
     override fun calculatePosition(
         anchorBounds: IntRect,
         windowSize: IntSize,
