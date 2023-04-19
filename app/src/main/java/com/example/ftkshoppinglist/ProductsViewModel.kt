@@ -28,10 +28,13 @@ class ProductsViewModel: ViewModel() {
                     p.add(
                         ProductData(
                             doc.get("id").toString(),
+                            doc.get("name").toString(),
                             doc.get("description").toString(),
                             doc.get("imageUri").toString(),
-                            doc.get("name").toString(),
-                            doc.get("aisle").toString()
+                            doc.get("aisle").toString(),
+                            doc.get("category").toString(),
+                            doc.get("subCategory").toString(),
+                            doc.get("price").toString().toIntOrNull() ?: 0
                         )
                     )
                 }

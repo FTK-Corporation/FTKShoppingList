@@ -256,7 +256,6 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                                                             name = product.name,
                                                             description = product.description,
                                                             imageUri = product.imageUri,
-                                                            aisle = product.aisle
                                                         )
                                                         val newList =
                                                             productsViewModel.list.toMutableList()
