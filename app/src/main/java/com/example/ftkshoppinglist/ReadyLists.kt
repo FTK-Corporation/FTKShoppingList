@@ -71,7 +71,6 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                                         )
                                         Text(text = list.name)
                                         Text(text = list.description)
-                                        Text(text = list.aisle)
                                         Spacer(modifier = Modifier.height(32.dp))
                                         Button(
                                             onClick = { productsViewModel.popupControl = null },

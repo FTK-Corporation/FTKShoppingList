@@ -88,9 +88,9 @@ fun PickImage() {
             if (storageViewModel.imageUri != null) Text(text = storageViewModel.imageUri.toString())
         }
 
-
-        if (storageViewModel.productExists)
-            Text(text = "Product exists!")
+        storageViewModel.productExists?.let {
+            if (it) Text(text = "Product exists!")
+        }
 
         Button(onClick = { storageViewModel.addProduct() }) {
             Text(text = "Add Product")

@@ -23,7 +23,10 @@ data class Product(
 )
 
 class StorageViewModel : ViewModel() {
-    var productExists by mutableStateOf(false)
+    var productExists by mutableStateOf<Boolean?>(null)
+    var popupControl by mutableStateOf<Boolean>(false)
+
+    var selectedProduct by mutableStateOf<ProductData?>(null)
 
     var idInput by mutableStateOf("")
     private val id: Int
@@ -120,8 +123,61 @@ class StorageViewModel : ViewModel() {
             .addOnFailureListener {
 
             }
+    }
 
+    fun updateProduct() {
+        Firebase.firestore.collection("productdata")
+            .document(id.toString())
+            .get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    Log.d("FIREBASE", "Product exists!")
+                    Log.d("FIREBASE DOCUMENT", doc.toString())
+                    productExists = true
+                    val imageRef = Firebase.storage.reference.child(id.toString())
 
+                    imageUri?.let { u ->
+                        imageRef.putFile(u)
+                            .addOnSuccessListener {
+                                imageRef.downloadUrl.addOnSuccessListener { remoteUri ->
+                                    Firebase.firestore.collection("productdata")
+                                        .document(id.toString())
+                                        .update(
+                                            "imageUri", remoteUri
+                                        )
+                                        .addOnSuccessListener {
+                                            imageUri = null
+                                        }
+                                }
+                            }
+                            .addOnFailureListener {
+                                Log.e("FIREBASE STORAGE", it.message.toString())
+                            }
+                    } ?: Log.d("IMAGE", "Image URI is null")
+                    Firebase.firestore.collection("productdata")
+                        .document(id.toString())
+                        .update(
+                            mapOf(
+                                "name" to name,
+                                "description" to description,
+                                "aisle" to aisle,
+                                "category" to category,
+                                "subCategory" to subCategory,
+                                "price" to price
+                            )
+                        )
+                        .addOnSuccessListener {
+                            imageUri = null
+                            popupControl = false
+                        }
+                } else {
+                    Log.d("FIREBASE", "Product doesn't exist")
+                    productExists = false
+                }
+            }
+            .addOnFailureListener {
+
+            }
     }
 }
 
