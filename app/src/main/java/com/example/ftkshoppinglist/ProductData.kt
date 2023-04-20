@@ -9,4 +9,13 @@ data class ProductData(
     val category: String? = null,
     val subCategory: String? = null,
     val price: Int? = null
-)
+) {
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "id" to id,
+            "name" to name,
+            "description" to description,
+            "imageUri" to imageUri,
+        )
+    }
+}
