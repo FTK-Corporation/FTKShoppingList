@@ -28,7 +28,7 @@ fun navCon(navController: NavHostController) {
             ShoppingListScreen(navController, productsViewModel)
         }
         composable(route = "Readylist") {
-            ReadyListScreen(navController, productsViewModel)
+            ReadyListScreen(navController, productsViewModel, authViewModel)
         }
         composable(route = "ShopSelect") {
             ShopSelectionScreen(navController)

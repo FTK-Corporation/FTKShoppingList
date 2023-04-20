@@ -16,13 +16,14 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.ftkshoppinglist.FirebaseAuthViewModel
 import com.example.ftkshoppinglist.ProductData
 import com.example.ftkshoppinglist.ProductsViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun ReadyListScreen(navController: NavController, productsViewModel: ProductsViewModel) {
+fun ReadyListScreen(navController: NavController, productsViewModel: ProductsViewModel, authViewModel: FirebaseAuthViewModel) {
 
         var fireBase = Firebase.firestore
         LazyVerticalGrid(
@@ -135,20 +136,8 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                             }
                             Button(
                                 onClick = {
-                                    // Convert the list of ProductData objects to a list of Map objects
-                                    val productList = productsViewModel.list.map { it.toMap() }
-
-                                    // Add the list of products to the "presetdata" collection in Firebase
-                                    fireBase.collection("presetdata")
-                                        .add(mapOf("products" to productList))
-                                        .addOnSuccessListener { documentReference ->
-                                            // Success
-                                            println("DocumentSnapshot added with ID: ${documentReference.id}")
-                                        }
-                                        .addOnFailureListener { e ->
-                                            // Failure
-                                            println("Error adding document: $e")
-                                        }
+                                    if(authViewModel.checkUser())
+                                    authViewModel.savePreset(productsViewModel.list)
                                     productsViewModel.list = mutableListOf<ProductData>()
                                     productsViewModel.isFinishButtonClicked = false
                                 }
