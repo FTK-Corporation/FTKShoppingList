@@ -80,7 +80,7 @@ fun SignUpForm(navController: NavController, authViewModel: FirebaseAuthViewMode
             CenteredProgressCircle()
         }
         "SUCCESS" -> {
-            navController.navigate("Profile")
+            navController.navigateUp()
             authViewModel.logInState = ""
         }
         "FAILURE" -> {

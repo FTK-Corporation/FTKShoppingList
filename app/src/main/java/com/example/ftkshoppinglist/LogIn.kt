@@ -61,7 +61,7 @@ fun LogInForm(navController: NavController, authViewModel: FirebaseAuthViewModel
             CenteredProgressCircle()
         }
         "SUCCESS" -> {
-            navController.navigate("Profile")
+            navController.navigateUp()
             authViewModel.logInState = ""
         }
         "FAILURE" -> {
