@@ -94,7 +94,7 @@ fun UpdateProductPopup(product: ProductData, storageViewModel: StorageViewModel)
         product.aisle?.let { storageViewModel.changeAisle(it) }
         product.category?.let { storageViewModel.changeCategory(it) }
         product.subCategory?.let { storageViewModel.changeSubCategory(it) }
-        product.price?.let { storageViewModel.priceInput }
+        product.price?.let { storageViewModel.priceInput = it.toString() }
     }
 
     Column(
