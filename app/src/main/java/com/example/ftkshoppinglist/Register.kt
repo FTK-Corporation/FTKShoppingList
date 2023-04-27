@@ -74,6 +74,10 @@ fun SignUpForm(navController: NavController, authViewModel: FirebaseAuthViewMode
         ) {
             Text(text = "Sign Up")
         }
+        Button(onClick = { navController.navigate("Login") }
+        ) {
+            Text(text = "Login")
+        }
     }
     when(authViewModel.logInState) {
         "LOADING" -> {

@@ -136,10 +136,13 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                             }
                             Button(
                                 onClick = {
-                                    if(authViewModel.checkUser())
-                                    authViewModel.savePreset(productsViewModel.list)
-                                    productsViewModel.list = mutableListOf<ProductData>()
-                                    productsViewModel.isFinishButtonClicked = false
+                                    if(authViewModel.checkUser()) {
+                                        authViewModel.savePreset(productsViewModel.list)
+                                        productsViewModel.list = mutableListOf<ProductData>()
+                                        productsViewModel.isFinishButtonClicked = false
+                                    } else {
+                                        navController.navigate("Login")
+                                    }
                                 }
                             ) {
                                 Text(text = "Save it!")

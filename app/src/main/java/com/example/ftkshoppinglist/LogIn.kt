@@ -55,6 +55,11 @@ fun LogInForm(navController: NavController, authViewModel: FirebaseAuthViewModel
         ) {
             Text(text = "Log In")
         }
+        Button(
+            onClick = { navController.navigate("SignUp") }
+        ) {
+            Text(text = "SignUp")
+        }
     }
     when(authViewModel.logInState) {
         "LOADING" -> {
