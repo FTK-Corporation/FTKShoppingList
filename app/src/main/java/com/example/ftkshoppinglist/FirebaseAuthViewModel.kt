@@ -24,6 +24,8 @@ class FirebaseAuthViewModel : ViewModel() {
     var pwdInput by mutableStateOf("")
     var usernameInput by mutableStateOf("")
 
+    var presetNameInput by mutableStateOf("")
+
     var logInState by mutableStateOf("")
     var errorMessage by mutableStateOf("")
 
@@ -116,17 +118,21 @@ class FirebaseAuthViewModel : ViewModel() {
 
     fun savePreset(presetArray: List<ProductData>) {
         val productList = presetArray.map { it.toMap() }
-        user.value?.let { fUser ->
-            Firebase.firestore.collection("udata")
-                .document(fUser.uid)
-                .collection("presets")
-                .add(mapOf("products" to productList))
-                .addOnSuccessListener {
-                    Log.d("FIREBASE", "Add successful")
-                }
-                .addOnFailureListener {
-                    Log.e("FIREBASE", it.toString())
-                }
+        if (productList.isNotEmpty()) {
+            user.value?.let { fUser ->
+                Firebase.firestore.collection("udata")
+                    .document(fUser.uid)
+                    .collection("presets")
+                    .add(mapOf(
+                        "name" to presetNameInput,
+                        "products" to productList))
+                    .addOnSuccessListener {
+                        Log.d("FIREBASE", "Add successful")
+                    }
+                    .addOnFailureListener {
+                        Log.e("FIREBASE", it.toString())
+                    }
+            }
         }
     }
 
