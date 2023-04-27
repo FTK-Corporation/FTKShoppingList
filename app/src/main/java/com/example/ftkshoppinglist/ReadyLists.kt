@@ -23,63 +23,88 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun ReadyListScreen(navController: NavController, productsViewModel: ProductsViewModel, authViewModel: FirebaseAuthViewModel) {
+fun ReadyListScreen(
+    navController: NavController,
+    productsViewModel: ProductsViewModel,
+    authViewModel: FirebaseAuthViewModel
+) {
 
-        var fireBase = Firebase.firestore
+    Column() {
+        OutlinedTextField(
+            value = authViewModel.presetNameInput,
+            onValueChange = { authViewModel.presetNameInput = it },
+            singleLine = true,
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                onClick = { productsViewModel.isFinishButtonClicked = true },
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text(text = "Finish Shopping!")
+            }
+        }
+
         LazyVerticalGrid(
-        columns = GridCells.Fixed(1),
-        contentPadding = PaddingValues(
-            start = 12.dp,
-            top = 16.dp,
-            end = 12.dp,
-            bottom = 16.dp
-        ),
-        content = {
-            items(productsViewModel.list) { list ->
-                TextButton(
-                    onClick = { productsViewModel.popupControl = list },
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .background(if (productsViewModel.isButtonClicked) MaterialTheme.colors.primary else MaterialTheme.colors.secondary)
-                ) {
-                    AsyncImage(
-                        model = list.imageUri,
-                        contentDescription = "Image",
+            columns = GridCells.Fixed(1),
+            contentPadding = PaddingValues(
+                start = 12.dp,
+                top = 16.dp,
+                end = 12.dp,
+                bottom = 16.dp
+            ),
+            content = {
+                items(productsViewModel.list) { list ->
+                    TextButton(
+                        onClick = { productsViewModel.popupControl = list },
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
-                            .padding(4.dp)
-                    )
+                            .padding(10.dp)
+                            .background(if (productsViewModel.isButtonClicked) MaterialTheme.colors.primary else MaterialTheme.colors.secondary)
+                    ) {
+                        AsyncImage(
+                            model = list.imageUri,
+                            contentDescription = "Image",
+                            modifier = Modifier
+                                .height(150.dp)
+                                .width(150.dp)
+                                .padding(4.dp)
+                        )
 
-                    if (productsViewModel.popupControl == list) {
-                        Popup(
-                            popupPositionProvider = WindowCenterOffsetPositionProvider(),
-                            onDismissRequest = { productsViewModel.popupControl = null },
-                        ) {
-                            Surface(
-                                border = BorderStroke(3.dp, MaterialTheme.colors.primary),
-                                shape = RoundedCornerShape(8.dp),
-                                color = MaterialTheme.colors.secondary,
+                        if (productsViewModel.popupControl == list) {
+                            Popup(
+                                popupPositionProvider = WindowCenterOffsetPositionProvider(),
+                                onDismissRequest = { productsViewModel.popupControl = null },
                             ) {
-                                Box(
-                                    modifier = Modifier.padding(100.dp),
+                                Surface(
+                                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = MaterialTheme.colors.secondary,
                                 ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    Box(
+                                        modifier = Modifier.padding(100.dp),
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
 
-                                        ) {
-                                        AsyncImage(
-                                            model = list.imageUri,
-                                            contentDescription = "Image"
-                                        )
-                                        Text(text = list.name)
-                                        Text(text = list.description)
-                                        Spacer(modifier = Modifier.height(32.dp))
-                                        Button(
-                                            onClick = { productsViewModel.popupControl = null },
-                                            modifier = Modifier.fillMaxWidth()
-                                        ) {
-                                            Text(text = "Return to selection")
+                                            ) {
+                                            AsyncImage(
+                                                model = list.imageUri,
+                                                contentDescription = "Image"
+                                            )
+                                            Text(text = list.name)
+                                            Text(text = list.description)
+                                            Spacer(modifier = Modifier.height(32.dp))
+                                            Button(
+                                                onClick = { productsViewModel.popupControl = null },
+                                                modifier = Modifier.fillMaxWidth()
+                                            ) {
+                                                Text(text = "Return to selection")
+                                            }
                                         }
                                     }
                                 }
@@ -87,74 +112,99 @@ fun ReadyListScreen(navController: NavController, productsViewModel: ProductsVie
                         }
                     }
                 }
+            }
+        )
+    }
 
+
+
+
+    if (productsViewModel.isFinishButtonClicked) {
+        Popup(
+            popupPositionProvider = WindowCenterOffsetPositionProvider(),
+            onDismissRequest = { productsViewModel.isFinishButtonClicked = false },
+        ) {
+            Surface(
+                border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+                shape = RoundedCornerShape(8.dp),
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(text = "Would you like to save this list into the presets?")
+
+                    Button(
+                        onClick = { productsViewModel.isFinishButtonClicked = false }
+                    ) {
+                        Text(text = "Return to list")
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                productsViewModel.list = mutableListOf<ProductData>()
+                                productsViewModel.isFinishButtonClicked = false
+                            }
+                        ) {
+                            Text(text = "Don't save it")
+                        }
+                        Button(
+                            onClick = {
+                                if (authViewModel.checkUser()) {
+                                    authViewModel.savePreset(productsViewModel.list)
+                                    productsViewModel.list = mutableListOf<ProductData>()
+                                    authViewModel.presetNameInput = ""
+                                    productsViewModel.isFinishButtonClicked = false
+                                } else {
+                                    navController.navigate("Login")
+                                }
+                            }
+                        ) {
+                            Text(text = "Save it!")
+                        }
+                    }
+                }
 
             }
         }
+    }
+    if (authViewModel.presetSavePopupControl) PresetSavePopup(
+        authViewModel = authViewModel,
+        productsViewModel = productsViewModel
     )
+}
 
-
-        Button(
-            onClick = { productsViewModel.isFinishButtonClicked = true },
-            modifier = Modifier.padding(bottom = 16.dp)
+@Composable
+fun PresetSavePopup(authViewModel: FirebaseAuthViewModel, productsViewModel: ProductsViewModel) {
+    Popup(
+        popupPositionProvider = WindowCenterOffsetPositionProvider(),
+        onDismissRequest = { authViewModel.presetSavePopupControl = false },
+    ) {
+        Surface(
+            border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colors.secondary,
+            modifier = Modifier.padding(18.dp)
         ) {
-            Text(text = "Finish Shopping!")
-        }
-        if (productsViewModel.isFinishButtonClicked) {
-            Popup(
-                popupPositionProvider = WindowCenterOffsetPositionProvider(),
-                onDismissRequest = { productsViewModel.isFinishButtonClicked = false },
-            ) {
-                Surface(
-                    border = BorderStroke(3.dp, MaterialTheme.colors.primary),
-                    shape = RoundedCornerShape(8.dp),
-                    color = MaterialTheme.colors.secondary,
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(text = "Would you like to save this list into the presets?")
+            Column {
+                OutlinedTextField(
+                    value = authViewModel.presetNameInput,
+                    onValueChange = { authViewModel.presetNameInput = it },
+                    label = { Text(text = "Preset Name") })
+                Button(onClick = {
 
-                        Button(
-                            onClick = { productsViewModel.isFinishButtonClicked = false }
-                        ) {
-                            Text(text = "Return to list")
-                        }
-
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-
-
-                            Button(
-                                onClick = {
-                                    productsViewModel.list = mutableListOf<ProductData>()
-                                    productsViewModel.isFinishButtonClicked = false
-                                }
-                            ) {
-                                Text(text = "Don't save it")
-                            }
-                            Button(
-                                onClick = {
-                                    if(authViewModel.checkUser()) {
-                                        authViewModel.savePreset(productsViewModel.list)
-                                        productsViewModel.list = mutableListOf<ProductData>()
-                                        productsViewModel.isFinishButtonClicked = false
-                                    } else {
-                                        navController.navigate("Login")
-                                    }
-                                }
-                            ) {
-                                Text(text = "Save it!")
-                            }
-                        }
-                    }
-
+                    authViewModel.presetSavePopupControl = false
+                }) {
+                    Text(text = "Save")
                 }
             }
         }
-}
+    }
 
+}
 
 class WindowCenterOffsetPositionProvider(
     private val x: Int = 0,
