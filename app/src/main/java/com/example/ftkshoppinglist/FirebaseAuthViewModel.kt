@@ -28,36 +28,37 @@ class FirebaseAuthViewModel : ViewModel() {
     var errorMessage by mutableStateOf("")
 
     fun registerUser() {
-        logInState="LOADING"
+        logInState = "LOADING"
         Firebase.auth.createUserWithEmailAndPassword(emailInput, pwdInput)
             .addOnSuccessListener {
                 user.value = it.user
                 createUData()
-                logInState="SUCCESS"
+                logInState = "SUCCESS"
                 Log.d("FIREBASE", "Success")
             }.addOnFailureListener {
-                logInState="FAILURE"
-                errorMessage=it.toString().substringAfter(":").trim()
+                logInState = "FAILURE"
+                errorMessage = it.toString().substringAfter(":").trim()
                 Log.e("FIREBASE", it.toString())
             }
     }
 
     fun signInUser() {
-        logInState="LOADING"
+        logInState = "LOADING"
         Firebase.auth.signInWithEmailAndPassword(emailInput, pwdInput)
             .addOnSuccessListener {
                 user.value = it.user
-                logInState="SUCCESS"
+                logInState = "SUCCESS"
                 Log.d("FIREBASE", "Log In Success")
             }
             .addOnFailureListener {
-                logInState="FAILURE"
-                errorMessage=it.toString().substringAfter(":").trim()
+                logInState = "FAILURE"
+                errorMessage = it.toString().substringAfter(":").trim()
                 Log.e("FIREBASE", it.toString())
             }
     }
 
     private fun createUData() {
+        var presetsArray = mutableListOf<ProductData>()
         user.value.let { fUser ->
             Firebase.firestore.collection("udata")
                 .document(fUser!!.uid)
@@ -66,6 +67,19 @@ class FirebaseAuthViewModel : ViewModel() {
                         "admin" to false,
                         "username" to usernameInput
                     )
+                )
+                .addOnSuccessListener {
+                    Log.d("FIREBASE", "Add successful")
+                }
+                .addOnFailureListener {
+                    Log.e("FIREBASE", it.toString())
+                }
+            Firebase.firestore.collection("udata")
+                .document(fUser.uid)
+                .collection("presets")
+                .document()
+                .set(
+                    presetsArray
                 )
                 .addOnSuccessListener {
                     Log.d("FIREBASE", "Add successful")
@@ -98,6 +112,22 @@ class FirebaseAuthViewModel : ViewModel() {
         } ?: Log.d("USER", "No user info")
 
         return admin
+    }
+
+    fun savePreset(presetArray: List<ProductData>) {
+        val productList = presetArray.map { it.toMap() }
+        user.value?.let { fUser ->
+            Firebase.firestore.collection("udata")
+                .document(fUser.uid)
+                .collection("presets")
+                .add(mapOf("products" to productList))
+                .addOnSuccessListener {
+                    Log.d("FIREBASE", "Add successful")
+                }
+                .addOnFailureListener {
+                    Log.e("FIREBASE", it.toString())
+                }
+        }
     }
 
     fun logOut() {
