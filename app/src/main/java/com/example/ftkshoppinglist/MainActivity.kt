@@ -108,7 +108,11 @@ fun MainApp() {
     }
     Scaffold(
         topBar = { MyTopBar(topBarTitle, navController, topBarHideIcon) },
-        content = { navCon(navController) },
+        content = {
+            Box(modifier = Modifier.padding(it)) {
+                navCon(navController)
+            }
+        },
         bottomBar = { BottomAppBar { Text(text = "FTK corporation") } }
     )
 }
