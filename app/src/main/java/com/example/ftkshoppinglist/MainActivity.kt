@@ -122,7 +122,6 @@ fun MainApp() {
 @Composable
 fun ShoppingListScreen(navController: NavController, productsViewModel: ProductsViewModel) {
 
-    var fireBase = Firebase.firestore;
     LaunchedEffect(Unit) {
         productsViewModel.fetchProducts()
     }
