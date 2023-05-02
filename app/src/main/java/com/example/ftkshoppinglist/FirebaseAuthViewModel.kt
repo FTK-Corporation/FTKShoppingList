@@ -25,6 +25,7 @@ class FirebaseAuthViewModel : ViewModel() {
     var usernameInput by mutableStateOf("")
 
     var presetNameInput by mutableStateOf("")
+    var presetSavePopupControl by mutableStateOf(false)
 
     var logInState by mutableStateOf("")
     var errorMessage by mutableStateOf("")
