@@ -102,6 +102,9 @@ class FirebaseAuthViewModel : ViewModel() {
 
     var presetNameInput by mutableStateOf("Shopping List")
     var presets by mutableStateOf(mutableListOf<PresetData>())
+    var selectedPreset by mutableStateOf<PresetData?>(null)
+
+    var presetPopupControl by mutableStateOf(false)
 
     fun savePreset(presetArray: List<ProductData>) {
         val productList = presetArray.map { it.toMap() }
@@ -112,7 +115,7 @@ class FirebaseAuthViewModel : ViewModel() {
                     .collection("presets")
                     .add(
                         mapOf(
-                            "name" to presetNameInput,
+                            "name" to presetNameInput.trim(),
                             "products" to productList
                         )
                     )
@@ -133,15 +136,28 @@ class FirebaseAuthViewModel : ViewModel() {
                 .document(fUser.uid)
                 .collection("presets")
                 .get()
-                .addOnSuccessListener {
-                    it.documents.forEach { doc ->
-
-                        tempPresets.add(
-                            PresetData(
-                                doc.get("name").toString(),
-                                doc.get("products") as List<ProductData>
-                            )
-                        )
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot.documents) {
+                        val name = document.getString("name") ?: ""
+                        val productList = mutableListOf<ProductData>()
+                        val productDataList =
+                            document.get("products") as? List<HashMap<String, Any>>
+                        productDataList?.let {
+                            for (product in it) {
+                                val productData = ProductData(
+                                    product["id"].toString(),
+                                    product["name"].toString(),
+                                    product["description"].toString(),
+                                    product["imageUri"].toString(),
+                                    product["aisle"].toString(),
+                                    product["category"].toString(),
+                                    product["subCategory"].toString(),
+                                    product["price"].toString().toIntOrNull() ?: 0
+                                )
+                                productList.add(productData)
+                            }
+                        }
+                        tempPresets.add(PresetData(name, productList))
                     }
                     presets = tempPresets
                 }
