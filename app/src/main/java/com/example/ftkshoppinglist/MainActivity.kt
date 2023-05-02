@@ -189,7 +189,7 @@ fun ShoppingListScreen(navController: NavController, productsViewModel: Products
                 onClick = { navController.navigate("Readylist") },
                 modifier = Modifier
                     .height(60.dp)
-                    .width(100.dp)
+                    .fillMaxWidth()
             ) {
                 Text(text = "To Shopping list!")
             }
