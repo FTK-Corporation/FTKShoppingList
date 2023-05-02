@@ -19,3 +19,8 @@ data class ProductData(
         )
     }
 }
+
+data class PresetData(
+    val name: String,
+    val products: List<ProductData>
+)
