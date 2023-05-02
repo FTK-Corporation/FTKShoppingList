@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
@@ -19,8 +20,6 @@ import coil.compose.AsyncImage
 import com.example.ftkshoppinglist.FirebaseAuthViewModel
 import com.example.ftkshoppinglist.ProductData
 import com.example.ftkshoppinglist.ProductsViewModel
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 @Composable
 fun ReadyListScreen(
@@ -29,11 +28,13 @@ fun ReadyListScreen(
     authViewModel: FirebaseAuthViewModel
 ) {
 
-    Column() {
+    Column(modifier = Modifier.padding(8.dp)) {
         OutlinedTextField(
             value = authViewModel.presetNameInput,
             onValueChange = { authViewModel.presetNameInput = it },
             singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(text = "Shopping List Name") }
         )
         Row(
             modifier = Modifier
@@ -127,21 +128,35 @@ fun ReadyListScreen(
             Surface(
                 border = BorderStroke(3.dp, MaterialTheme.colors.primary),
                 shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colors.secondary,
+                color = MaterialTheme.colors.surface,
                 modifier = Modifier.padding(8.dp)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(8.dp)
                 ) {
-                    Text(text = "Would you like to save this list into the presets?")
-
                     Button(
                         onClick = { productsViewModel.isFinishButtonClicked = false }
                     ) {
                         Text(text = "Return to list")
                     }
+                    Text(
+                        text = "Would you like to save this list into the presets?",
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center
+                    )
+
+                    if (authViewModel.presetNameInput == "Shopping List") {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = "Remember you can change the list name!",
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Button(
                             onClick = {
@@ -171,40 +186,40 @@ fun ReadyListScreen(
             }
         }
     }
-    if (authViewModel.presetSavePopupControl) PresetSavePopup(
-        authViewModel = authViewModel,
-        productsViewModel = productsViewModel
-    )
+//    if (authViewModel.presetSavePopupControl) PresetSavePopup(
+//        authViewModel = authViewModel,
+//        productsViewModel = productsViewModel
+//    )
 }
 
-@Composable
-fun PresetSavePopup(authViewModel: FirebaseAuthViewModel, productsViewModel: ProductsViewModel) {
-    Popup(
-        popupPositionProvider = WindowCenterOffsetPositionProvider(),
-        onDismissRequest = { authViewModel.presetSavePopupControl = false },
-    ) {
-        Surface(
-            border = BorderStroke(3.dp, MaterialTheme.colors.primary),
-            shape = RoundedCornerShape(8.dp),
-            color = MaterialTheme.colors.secondary,
-            modifier = Modifier.padding(18.dp)
-        ) {
-            Column {
-                OutlinedTextField(
-                    value = authViewModel.presetNameInput,
-                    onValueChange = { authViewModel.presetNameInput = it },
-                    label = { Text(text = "Preset Name") })
-                Button(onClick = {
-
-                    authViewModel.presetSavePopupControl = false
-                }) {
-                    Text(text = "Save")
-                }
-            }
-        }
-    }
-
-}
+//@Composable
+//fun PresetSavePopup(authViewModel: FirebaseAuthViewModel, productsViewModel: ProductsViewModel) {
+//    Popup(
+//        popupPositionProvider = WindowCenterOffsetPositionProvider(),
+//        onDismissRequest = { authViewModel.presetSavePopupControl = false },
+//    ) {
+//        Surface(
+//            border = BorderStroke(3.dp, MaterialTheme.colors.primary),
+//            shape = RoundedCornerShape(8.dp),
+//            color = MaterialTheme.colors.secondary,
+//            modifier = Modifier.padding(18.dp)
+//        ) {
+//            Column {
+//                OutlinedTextField(
+//                    value = authViewModel.presetNameInput,
+//                    onValueChange = { authViewModel.presetNameInput = it },
+//                    label = { Text(text = "Preset Name") })
+//                Button(onClick = {
+//
+//                    authViewModel.presetSavePopupControl = false
+//                }) {
+//                    Text(text = "Save")
+//                }
+//            }
+//        }
+//    }
+//
+//}
 
 class WindowCenterOffsetPositionProvider(
     private val x: Int = 0,
