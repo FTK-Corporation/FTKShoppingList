@@ -24,9 +24,6 @@ class FirebaseAuthViewModel : ViewModel() {
     var pwdInput by mutableStateOf("")
     var usernameInput by mutableStateOf("")
 
-    var presetNameInput by mutableStateOf("")
-    var presetSavePopupControl by mutableStateOf(false)
-
     var logInState by mutableStateOf("")
     var errorMessage by mutableStateOf("")
 
@@ -61,7 +58,6 @@ class FirebaseAuthViewModel : ViewModel() {
     }
 
     private fun createUData() {
-        var presetsArray = mutableListOf<ProductData>()
         user.value.let { fUser ->
             Firebase.firestore.collection("udata")
                 .document(fUser!!.uid)
@@ -70,19 +66,6 @@ class FirebaseAuthViewModel : ViewModel() {
                         "admin" to false,
                         "username" to usernameInput
                     )
-                )
-                .addOnSuccessListener {
-                    Log.d("FIREBASE", "Add successful")
-                }
-                .addOnFailureListener {
-                    Log.e("FIREBASE", it.toString())
-                }
-            Firebase.firestore.collection("udata")
-                .document(fUser.uid)
-                .collection("presets")
-                .document()
-                .set(
-                    presetsArray
                 )
                 .addOnSuccessListener {
                     Log.d("FIREBASE", "Add successful")
@@ -117,6 +100,9 @@ class FirebaseAuthViewModel : ViewModel() {
         return admin
     }
 
+    var presetNameInput by mutableStateOf("Shopping List")
+    var presets by mutableStateOf(mutableListOf<PresetData>())
+
     fun savePreset(presetArray: List<ProductData>) {
         val productList = presetArray.map { it.toMap() }
         if (productList.isNotEmpty()) {
@@ -124,9 +110,12 @@ class FirebaseAuthViewModel : ViewModel() {
                 Firebase.firestore.collection("udata")
                     .document(fUser.uid)
                     .collection("presets")
-                    .add(mapOf(
-                        "name" to presetNameInput,
-                        "products" to productList))
+                    .add(
+                        mapOf(
+                            "name" to presetNameInput,
+                            "products" to productList
+                        )
+                    )
                     .addOnSuccessListener {
                         Log.d("FIREBASE", "Add successful")
                     }
@@ -134,6 +123,28 @@ class FirebaseAuthViewModel : ViewModel() {
                         Log.e("FIREBASE", it.toString())
                     }
             }
+        }
+    }
+
+    fun fetchPresets() {
+        var tempPresets = mutableListOf<PresetData>()
+        user.value?.let { fUser ->
+            Firebase.firestore.collection("udata")
+                .document(fUser.uid)
+                .collection("presets")
+                .get()
+                .addOnSuccessListener {
+                    it.documents.forEach { doc ->
+
+                        tempPresets.add(
+                            PresetData(
+                                doc.get("name").toString(),
+                                doc.get("products") as List<ProductData>
+                            )
+                        )
+                    }
+                    presets = tempPresets
+                }
         }
     }
 
