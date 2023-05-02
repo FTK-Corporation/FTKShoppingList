@@ -12,8 +12,6 @@ class ProductsViewModel: ViewModel() {
 
     var list by mutableStateOf(mutableListOf<ProductData>())
 
-
-
     var popupControl by mutableStateOf<ProductData?>(null)
 
     var isButtonClicked by  mutableStateOf(false)
