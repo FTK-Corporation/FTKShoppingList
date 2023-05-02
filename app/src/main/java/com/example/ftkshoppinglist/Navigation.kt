@@ -19,7 +19,7 @@ fun navCon(navController: NavHostController) {
             WelcomeScreen(navController)
         }
         composable(route = "Preset") {
-            PresetScreen(navController)
+            PresetScreen(authViewModel)
         }
         composable(route = "Profile") {
             ProfileScreen(navController, authViewModel)
